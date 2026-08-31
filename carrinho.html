@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carrinho · NDJ 3D</title>
+<link rel="icon" href="assets/logo.jpg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-pagina="carrinho">
+<div class="topo-aviso" id="ndj-topo-aviso"></div>
+<header class="cabecalho" id="ndj-cabecalho"></header>
+
+<section class="secao">
+  <div class="container">
+    <span class="eyebrow">Seu carrinho</span>
+    <h1 style="margin:10px 0 26px">Carrinho de compras</h1>
+
+    <div class="grade-carrinho">
+      <div>
+        <div id="lista-itens-carrinho"></div>
+        <div class="carrinho-vazio" id="carrinho-vazio" style="display:none">
+          <div class="icone">🛒</div>
+          <h3>Seu carrinho está vazio</h3>
+          <p>Que tal dar uma olhada nos nossos produtos?</p>
+          <a href="produtos.html" class="btn btn-bronze">Ver produtos</a>
+        </div>
+      </div>
+
+      <div id="coluna-resumo">
+        <div class="caixa-resumo">
+          <h3 style="margin-bottom:16px">Resumo do pedido</h3>
+          <div class="linha"><span>Subtotal</span><span id="valor-subtotal">R$ 0,00</span></div>
+          <div class="linha" id="linha-desconto" style="display:none"><span>Desconto</span><span id="valor-desconto">R$ 0,00</span></div>
+
+          <form id="form-cupom" class="form-cupom">
+            <input type="text" id="campo-cupom" placeholder="Cupom de desconto">
+            <button class="btn btn-contorno btn-pequeno" type="submit">Aplicar</button>
+          </form>
+          <div id="msg-cupom" class="msg-cupom"></div>
+
+          <div class="linha total"><span>Total estimado</span><span id="valor-total-carrinho">R$ 0,00</span></div>
+          <button class="btn btn-primario btn-bloco" style="margin-top:16px" id="btn-finalizar-compra">Finalizar compra</button>
+          <p style="font-size:12px; color:var(--tinta-suave); margin-top:10px">O frete é calculado na etapa de checkout, de acordo com o seu CEP.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="rodape" id="ndj-rodape"></footer>
+
+<div id="ndj-flutuantes"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/data.js"></script>
+<script src="js/config.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/main.js"></script>
+<script src="js/carrinho.js"></script>
+</body>
+</html>

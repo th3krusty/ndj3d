@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contato · NDJ 3D</title>
+<link rel="icon" href="assets/logo.jpg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-pagina="contato">
+<div class="topo-aviso" id="ndj-topo-aviso"></div>
+<header class="cabecalho" id="ndj-cabecalho"></header>
+
+<section class="secao">
+  <div class="container">
+    <span class="eyebrow">Fale com a gente</span>
+    <h1 style="margin:10px 0 30px">Contato</h1>
+
+    <div class="grade-contato">
+      <div>
+        <h3>Envie uma mensagem</h3>
+        <form id="form-contato">
+          <div class="grupo-form"><label>Nome</label><input type="text" required></div>
+          <div class="grupo-form"><label>E-mail</label><input type="email" required></div>
+          <div class="grupo-form"><label>Assunto</label>
+            <select required>
+              <option value="">Selecione...</option>
+              <option>Dúvida sobre produto</option>
+              <option>Status do pedido</option>
+              <option>Personalização</option>
+              <option>Outro</option>
+            </select>
+          </div>
+          <div class="grupo-form"><label>Mensagem</label><textarea required></textarea></div>
+          <button class="btn btn-primario btn-bloco" type="submit">Enviar mensagem</button>
+          <p id="mensagem-envio-contato" style="display:none; color:var(--sucesso); margin-top:12px; font-size:14px;">✓ Mensagem enviada com sucesso! Retornaremos em breve.</p>
+        </form>
+      </div>
+
+      <div>
+        <h3>Outros canais</h3>
+        <div class="card-contato-info"><span class="icone"></span><div><strong>WhatsApp</strong><br>(46) 98837-2988</div></div>
+        <div class="card-contato-info"><span class="icone"></span><div><strong>E-mail</strong><br>NDJ3D@OUTLOOK.COM</div></div>
+        <div class="card-contato-info"><span class="icone"></span><div><strong>Instagram</strong><br>NDJ.3D</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="rodape" id="ndj-rodape"></footer>
+
+<div id="ndj-flutuantes"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/data.js"></script>
+<script src="js/config.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/main.js"></script>
+<script src="js/contato.js"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+/* ==========================================================================
+   NDJ 3D — Estilos exclusivos do painel administrador
+   ========================================================================== */
+
+.corpo-admin{ background: var(--creme); min-height:100vh; }
+
+.tela-login-admin{
+  min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;
+}
+.caixa-login{
+  background: var(--creme-2); border:1px solid var(--linha); border-radius: var(--raio);
+  padding:40px 34px; width:100%; max-width:380px; box-shadow: var(--sombra); text-align:center;
+}
+.caixa-login img{ width:64px; height:64px; border-radius:50%; margin:0 auto 14px; }
+.caixa-login h1{ font-size:20px; margin-bottom:6px; }
+.caixa-login p.sub{ font-size:13px; color: var(--tinta-suave); margin-bottom:22px; }
+.erro-login{ color: var(--erro); font-size:13px; margin-top:10px; display:none; }
+
+.shell-admin{ display:grid; grid-template-columns: 230px 1fr; min-height:100vh; }
+.lateral-admin{
+  background: var(--tinta); color: var(--creme-2); padding: 24px 16px; display:flex; flex-direction:column;
+}
+.lateral-admin .marca-admin{ display:flex; align-items:center; gap:10px; margin-bottom:30px; padding:0 6px;}
+.lateral-admin .marca-admin img{ width:38px; height:38px; border-radius:50%; }
+.lateral-admin .marca-admin strong{ font-family: var(--fonte-display); font-size:15px; display:block; }
+.lateral-admin .marca-admin span{ font-size:10px; opacity:0.7; }
+.nav-admin button{
+  display:flex; align-items:center; gap:10px; width:100%; text-align:left;
+  background:none; border:none; color: var(--creme-2); padding:12px 12px; border-radius:4px;
+  font-size:14px; font-weight:500; opacity:0.75; margin-bottom:4px;
+}
+.nav-admin button:hover{ opacity:1; background: rgba(255,255,255,0.06); }
+.nav-admin button.ativo{ background: var(--bronze); opacity:1; color:#fff; }
+.rodape-lateral{ margin-top:auto; }
+.rodape-lateral a{ font-size:13px; opacity:0.7; display:block; margin-bottom:10px; }
+.rodape-lateral button{ width:100%; }
+
+.principal-admin{ padding: 30px 36px; overflow-x:auto; }
+.cabecalho-admin{ display:flex; justify-content:space-between; align-items:center; margin-bottom:26px; }
+.cabecalho-admin h1{ font-size:22px; margin:0; }
+
+.grade-metricas{ display:grid; grid-template-columns: repeat(4,1fr); gap:18px; margin-bottom:30px; }
+.cartao-metrica{ background: var(--creme-2); border:1px solid var(--linha); border-radius: var(--raio); padding:20px; }
+.cartao-metrica .valor{ font-family: var(--fonte-display); font-size:26px; }
+.cartao-metrica .rotulo{ font-size:12.5px; color: var(--tinta-suave); text-transform:uppercase; letter-spacing:0.03em; }
+
+.painel-admin-secao{ display:none; }
+.painel-admin-secao.ativo{ display:block; }
+
+.tabela-admin{ width:100%; border-collapse:collapse; background: var(--creme-2); border:1px solid var(--linha); border-radius: var(--raio); overflow:hidden;}
+.tabela-admin th, .tabela-admin td{ padding:12px 14px; text-align:left; font-size:13.5px; border-bottom:1px solid var(--linha); }
+.tabela-admin th{ background:#EFE7D5; text-transform:uppercase; font-size:11px; letter-spacing:0.04em; }
+.tabela-admin img{ width:42px; height:42px; object-fit:cover; border-radius:3px; }
+.tabela-admin .acoes-tabela{ display:flex; gap:8px; }
+.pill-status{ padding:3px 10px; border-radius:20px; font-size:11px; font-weight:600; text-transform:uppercase; }
+.pill-status.pago{ background:#e4eee4; color: var(--sucesso); }
+.pill-status.preparando{ background:#f4ecd8; color:var(--bronze-escuro); }
+.pill-status.enviado{ background:#dbe8f5; color:#2a5b8a; }
+.pill-status.entregue{ background:#e4eee4; color: var(--sucesso); }
+.pill-status.ativo{ background:#e4eee4; color:var(--sucesso); }
+.pill-status.inativo{ background:#f2dede; color:var(--erro); }
+
+.barra-acoes-secao{ display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; gap:12px; flex-wrap:wrap; }
+.busca-admin{ padding:9px 12px; border:1px solid var(--linha); border-radius:3px; min-width:220px; }
+
+.sobreposicao-modal{
+  position:fixed; inset:0; background: rgba(27,24,21,0.55); display:none;
+  align-items:flex-start; justify-content:center; padding: 40px 20px; overflow-y:auto; z-index:1000;
+}
+.sobreposicao-modal.aberta{ display:flex; }
+.caixa-modal{
+  background: var(--creme-2); border-radius: var(--raio); padding:28px 30px; width:100%; max-width:640px;
+  max-height:90vh; overflow-y:auto;
+}
+.cabecalho-modal{ display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+.fechar-modal{ background:none; border:none; font-size:22px; line-height:1; }
+.campos-imagens-admin{ display:grid; gap:8px; margin-bottom:14px; }
+.rodape-modal{ display:flex; justify-content:flex-end; gap:10px; margin-top:18px; }
+
+.grade-cores-admin{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+.tag-cor-admin{ display:flex; align-items:center; gap:6px; background:#fff; border:1px solid var(--linha); border-radius:20px; padding:4px 10px; font-size:12px; }
+.tag-cor-admin button{ background:none; border:none; color: var(--erro); font-weight:700; }
+
+@media (max-width: 900px){
+  .shell-admin{ grid-template-columns: 1fr; }
+  .lateral-admin{ flex-direction:row; overflow-x:auto; }
+  .nav-admin{ display:flex; gap:6px; }
+  .grade-metricas{ grid-template-columns: 1fr 1fr; }
+  .principal-admin{ padding:20px; }
+}

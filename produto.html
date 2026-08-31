@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Produto · NDJ 3D</title>
+<link rel="icon" href="assets/logo.jpg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-pagina="produtos">
+<div class="topo-aviso" id="ndj-topo-aviso"></div>
+<header class="cabecalho" id="ndj-cabecalho"></header>
+
+<section class="secao" style="padding-top:30px" id="conteudo-produto">
+  <div class="container">
+    <p class="trilha"><a href="index.html">Início</a> / <a href="produtos.html" id="trilha-categoria">Categoria</a> / <span id="trilha-produto">Produto</span></p>
+
+    <div class="produto-detalhe">
+      <div>
+        <div class="galeria-principal"><img id="galeria-principal-img" src="" alt=""></div>
+        <div class="galeria-miniaturas" id="galeria-miniaturas"></div>
+      </div>
+
+      <div class="info-produto">
+        <span class="eyebrow">NDJ 3D <a id="link-shopee-produto" href="#" target="_blank" rel="noopener" class="link-shopee-produto">Ver na<img src="assets/icones/shopee.png" alt="Shopee"></a></span>
+        <h1 id="nome-produto">Carregando...</h1>
+        <div class="avaliacao" id="avaliacao-produto"></div>
+
+        <span class="a-partir" id="rotulo-a-partir" style="display:none">a partir de</span>
+        <div class="preco-produto" id="preco-produto-valor">R$ 0,00</div>
+        <div class="parcelas">ou em até 3x sem juros no cartão · <span id="estoque-produto" style="color:var(--sucesso)"></span></div>
+
+        <div class="bloco-opcao" id="bloco-cores"></div>
+        <div class="bloco-opcao" id="bloco-personalizar"></div>
+
+        <div class="bloco-opcao">
+          <label class="titulo-opcao">Quantidade</label>
+          <div class="quantidade-linha">
+            <div class="seletor-qtd">
+              <button type="button" id="btn-qtd-menos">−</button>
+              <input type="number" id="qtd-input" value="1" min="1">
+              <button type="button" id="btn-qtd-mais">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="resumo-preco-final" id="resumo-preco-final"></div>
+
+        <div class="acoes-produto">
+          <button class="btn btn-primario" id="btn-adicionar-carrinho" style="flex:1">Adicionar ao carrinho</button>
+          <button class="btn btn-bronze" id="btn-comprar-agora" style="flex:1">Comprar agora</button>
+        </div>
+
+        <div class="calculo-frete" style="margin-top:26px">
+          <label class="titulo-opcao" style="margin:0">Calcular frete e prazo</label>
+          <div class="linha-cep">
+            <input type="text" id="campo-cep" placeholder="Digite seu CEP" maxlength="9">
+            <button class="btn btn-contorno btn-pequeno" id="btn-calcular-frete">Calcular</button>
+          </div>
+          <div class="resultado-frete" id="resultado-frete"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="abas-produto">
+      <div class="abas-cabecalho">
+        <button class="ativa" data-painel="painel-descricao">Descrição</button>
+        <button data-painel="painel-caracteristicas">Características</button>
+        <button data-painel="painel-entrega">Entrega</button>
+        <button data-painel="painel-avaliacoes" id="btn-aba-avaliacoes">Avaliações</button>
+      </div>
+      <div class="painel-aba ativa" id="painel-descricao"></div>
+      <div class="painel-aba" id="painel-caracteristicas"></div>
+      <div class="painel-aba" id="painel-entrega"></div>
+      <div class="painel-aba" id="painel-avaliacoes"></div>
+    </div>
+
+    <div class="secao" id="secao-relacionados">
+      <div class="secao-topo"><h2>Você também pode gostar</h2></div>
+      <div class="grade-produtos" id="grade-relacionados"></div>
+    </div>
+  </div>
+</section>
+
+<footer class="rodape" id="ndj-rodape"></footer>
+
+<div id="ndj-flutuantes"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/data.js"></script>
+<script src="js/config.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/main.js"></script>
+<script src="js/produto.js"></script>
+</body>
+</html>

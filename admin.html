@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administrador · NDJ 3D</title>
+<link rel="icon" href="assets/logo.jpg">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="corpo-admin">
+
+<!-- TELA DE LOGIN -->
+<div class="tela-login-admin" id="tela-login">
+  <div class="caixa-login">
+    <img src="assets/logo.jpg" alt="Logo NDJ 3D">
+    <h1>Painel administrador</h1>
+    <p class="sub">NDJ 3D · Ideias que ganham forma</p>
+    <form id="form-login-admin">
+      <div class="grupo-form" style="text-align:left">
+        <label>Senha de acesso</label>
+        <input type="password" id="campo-senha-admin" required autofocus>
+      </div>
+      <button class="btn btn-primario btn-bloco" type="submit">Entrar</button>
+      <p class="erro-login" id="erro-login">Senha incorreta. Tente novamente.</p>
+    </form>
+    <p style="font-size:12px; color:var(--tinta-suave); margin-top:18px">O login agora usa o usuário administrador cadastrado no Supabase Auth (veja README-SUPABASE.md).</p>
+    <p style="margin-top:14px"><a href="index.html" style="font-size:13px; text-decoration:underline;">← Voltar para a loja</a></p>
+  </div>
+</div>
+
+<!-- PAINEL -->
+<div class="shell-admin" id="shell-admin" style="display:none">
+  <aside class="lateral-admin">
+    <div class="marca-admin">
+      <img src="assets/logo.jpg" alt="">
+      <div><strong>NDJ 3D</strong><span>Painel admin</span></div>
+    </div>
+    <nav class="nav-admin">
+      <button class="ativo" data-secao="visao-geral">📊 Visão geral</button>
+      <button data-secao="produtos">📦 Produtos</button>
+      <button data-secao="categorias">🗂️ Categorias</button>
+      <button data-secao="cupons">🏷️ Cupons</button>
+      <button data-secao="pedidos">🚚 Pedidos</button>
+      <button data-secao="config">⚙️ Configurações</button>
+    </nav>
+    <div class="rodape-lateral">
+      <a href="index.html">← Ver loja</a>
+      <button class="btn btn-contorno" id="btn-sair-admin" style="border-color:rgba(255,255,255,0.3); color:#fff;">Sair</button>
+    </div>
+  </aside>
+
+  <main class="principal-admin">
+
+    <div class="grade-metricas">
+      <div class="cartao-metrica"><div class="valor" id="metrica-produtos">0</div><div class="rotulo">Produtos ativos</div></div>
+      <div class="cartao-metrica"><div class="valor" id="metrica-pedidos">0</div><div class="rotulo">Pedidos recebidos</div></div>
+      <div class="cartao-metrica"><div class="valor" id="metrica-faturamento">R$ 0,00</div><div class="rotulo">Faturamento total</div></div>
+      <div class="cartao-metrica"><div class="valor" id="metrica-cupons">0</div><div class="rotulo">Cupons ativos</div></div>
+    </div>
+
+    <!-- VISÃO GERAL -->
+    <section class="painel-admin-secao ativo" id="secao-visao-geral">
+      <div class="cabecalho-admin"><h1>Visão geral</h1></div>
+      <p>Bem-vindo(a) ao painel da NDJ 3D. Use o menu ao lado para cadastrar produtos, criar cupons de desconto e acompanhar os pedidos recebidos na loja.</p>
+      <div class="camadas densa"></div>
+      <h3>Como usar</h3>
+      <ul style="padding-left:20px; line-height:1.9; color:var(--tinta-suave)">
+        <li>Em <strong>Produtos</strong>, cadastre até 5 fotos, cores, preço e a opção de personalização com nome.</li>
+        <li>Em <strong>Cupons</strong>, crie descontos percentuais ou de valor fixo para usar no carrinho.</li>
+        <li>Em <strong>Pedidos</strong>, acompanhe e atualize o status de envio de cada compra.</li>
+      </ul>
+    </section>
+
+    <!-- PRODUTOS -->
+    <section class="painel-admin-secao" id="secao-produtos">
+      <div class="cabecalho-admin">
+        <h1>Produtos</h1>
+        <button class="btn btn-bronze" id="btn-novo-produto">+ Novo produto</button>
+      </div>
+      <div class="barra-acoes-secao">
+        <input type="search" class="busca-admin" id="busca-admin-produtos" placeholder="Buscar produto...">
+      </div>
+      <table class="tabela-admin">
+        <thead><tr><th>Foto</th><th>Nome</th><th>Categoria</th><th>Preço</th><th>Estoque</th><th>Personalização</th><th>Ações</th></tr></thead>
+        <tbody id="corpo-tabela-produtos"></tbody>
+      </table>
+    </section>
+
+    <!-- CATEGORIAS -->
+    <section class="painel-admin-secao" id="secao-categorias">
+      <div class="cabecalho-admin">
+        <h1>Categorias</h1>
+        <button class="btn btn-bronze" id="btn-nova-categoria">+ Nova categoria</button>
+      </div>
+      <table class="tabela-admin">
+        <thead><tr><th>Ícone</th><th>Nome</th><th>Descrição</th><th>Produtos</th><th>Ações</th></tr></thead>
+        <tbody id="corpo-tabela-categorias"></tbody>
+      </table>
+    </section>
+
+    <!-- CUPONS -->
+    <section class="painel-admin-secao" id="secao-cupons">
+      <div class="cabecalho-admin"><h1>Cupons de desconto</h1></div>
+      <form id="form-novo-cupom" style="background:var(--creme-2); border:1px solid var(--linha); border-radius:4px; padding:18px; margin-bottom:24px;">
+        <div class="grade-3">
+          <div class="grupo-form"><label>Código</label><input type="text" id="campo-cupom-codigo" placeholder="EX: PROMO10" required></div>
+          <div class="grupo-form"><label>Tipo</label>
+            <select id="campo-cupom-tipo">
+              <option value="percentual">Percentual (%)</option>
+              <option value="fixo">Valor fixo (R$)</option>
+            </select>
+          </div>
+          <div class="grupo-form"><label>Valor</label><input type="number" step="0.01" id="campo-cupom-valor" required></div>
+        </div>
+        <div class="grade-2">
+          <div class="grupo-form"><label>Validade (opcional)</label><input type="date" id="campo-cupom-validade"></div>
+          <div class="grupo-form" style="display:flex; align-items:flex-end;"><button class="btn btn-primario" type="submit">Criar cupom</button></div>
+        </div>
+      </form>
+      <table class="tabela-admin">
+        <thead><tr><th>Código</th><th>Tipo</th><th>Valor</th><th>Status</th><th>Ações</th></tr></thead>
+        <tbody id="corpo-tabela-cupons"></tbody>
+      </table>
+    </section>
+
+    <!-- PEDIDOS -->
+    <section class="painel-admin-secao" id="secao-pedidos">
+      <div class="cabecalho-admin"><h1>Pedidos</h1></div>
+      <table class="tabela-admin">
+        <thead><tr><th>Pedido</th><th>Cliente</th><th>Data</th><th>Total</th><th>Status</th></tr></thead>
+        <tbody id="corpo-tabela-pedidos"></tbody>
+      </table>
+    </section>
+
+    <!-- CONFIGURAÇÕES -->
+    <section class="painel-admin-secao" id="secao-config">
+      <div class="cabecalho-admin"><h1>Configurações</h1></div>
+      <form id="form-alterar-senha" style="max-width:360px">
+        <h3>Alterar senha do administrador</h3>
+        <div class="grupo-form"><label>Nova senha</label><input type="password" id="campo-nova-senha" required></div>
+        <button class="btn btn-primario" type="submit">Salvar nova senha</button>
+      </form>
+    </section>
+
+  </main>
+</div>
+
+<!-- MODAL PRODUTO -->
+<div class="sobreposicao-modal" id="modal-produto">
+  <div class="caixa-modal">
+    <div class="cabecalho-modal">
+      <h3 id="titulo-modal-produto" style="margin:0">Novo produto</h3>
+      <button class="fechar-modal" id="fechar-modal-produto">&times;</button>
+    </div>
+    <form id="form-produto-admin">
+      <input type="hidden" id="campo-produto-id">
+      <div class="grupo-form"><label>Nome do produto</label><input type="text" id="campo-produto-nome" required></div>
+      <div class="grade-2">
+        <div class="grupo-form"><label>Categoria</label>
+          <select id="campo-produto-categoria"></select>
+        </div>
+        <div class="grupo-form"><label>Preço (R$)</label><input type="number" step="0.01" id="campo-produto-preco" required></div>
+      </div>
+      <div class="grade-3">
+        <div class="grupo-form"><label>Estoque</label><input type="number" id="campo-produto-estoque"></div>
+        <div class="grupo-form"><label>Peso (kg)</label><input type="number" step="0.01" id="campo-produto-peso"></div>
+        <div class="grupo-form"><label>Link da Shopee</label><input type="url" id="campo-produto-shopee"></div>
+      </div>
+
+      <label style="font-size:13px; font-weight:600; display:block; margin-bottom:8px;">Fotos do anúncio (recomendado: 5 fotos)</label>
+      <div class="campos-imagens-admin">
+        <input type="url" id="campo-imagem-0" placeholder="URL da foto 1 (principal)">
+        <input type="url" id="campo-imagem-1" placeholder="URL da foto 2">
+        <input type="url" id="campo-imagem-2" placeholder="URL da foto 3">
+        <input type="url" id="campo-imagem-3" placeholder="URL da foto 4">
+        <input type="url" id="campo-imagem-4" placeholder="URL da foto 5">
+      </div>
+
+      <label style="font-size:13px; font-weight:600; display:block; margin-bottom:8px;">Cores disponíveis</label>
+      <div class="grade-cores-admin" id="lista-cores-admin"></div>
+      <div style="display:flex; gap:8px; margin-bottom:16px;">
+        <input type="text" id="campo-nova-cor-nome" placeholder="Nome da cor" style="flex:1; padding:9px; border:1px solid var(--linha); border-radius:3px;">
+        <input type="color" id="campo-nova-cor-hex" value="#1B1815" style="width:50px; border:1px solid var(--linha); border-radius:3px;">
+        <button type="button" class="btn btn-contorno btn-pequeno" id="btn-add-cor">Adicionar cor</button>
+      </div>
+
+      <div class="grupo-form">
+        <label><input type="checkbox" id="check-personalizacao-admin"> Permitir personalização com nome</label>
+      </div>
+      <div class="grade-3" id="campos-personalizacao-admin" style="display:none">
+        <div class="grupo-form"><label>Preço adicional (R$)</label><input type="number" step="0.01" id="campo-personalizacao-preco"></div>
+        <div class="grupo-form"><label>Texto de instrução</label><input type="text" id="campo-personalizacao-rotulo"></div>
+        <div class="grupo-form"><label>Máx. caracteres</label><input type="number" id="campo-personalizacao-max"></div>
+      </div>
+
+      <div class="grupo-form"><label>Descrição</label><textarea id="campo-produto-descricao" required></textarea></div>
+      <div class="grupo-form"><label>Características (uma por linha)</label><textarea id="campo-produto-caracteristicas" placeholder="Material: PLA premium&#10;Tamanho: 6x4cm"></textarea></div>
+
+      <div class="rodape-modal">
+        <button type="button" class="btn btn-contorno" id="cancelar-modal-produto" onclick="document.getElementById('modal-produto').classList.remove('aberta')">Cancelar</button>
+        <button type="submit" class="btn btn-primario">Salvar produto</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL CATEGORIA -->
+<div class="sobreposicao-modal" id="modal-categoria">
+  <div class="caixa-modal" style="max-width:460px">
+    <div class="cabecalho-modal">
+      <h3 id="titulo-modal-categoria" style="margin:0">Nova categoria</h3>
+      <button class="fechar-modal" id="fechar-modal-categoria">&times;</button>
+    </div>
+    <form id="form-categoria-admin">
+      <input type="hidden" id="campo-categoria-id">
+      <div class="grupo-form"><label>Nome da categoria</label><input type="text" id="campo-categoria-nome" required placeholder="Ex: Chaveiros"></div>
+      <div class="grupo-form"><label>Descrição curta</label><input type="text" id="campo-categoria-desc" placeholder="Ex: Chaveiros personalizados no seu estilo"></div>
+      <div class="grupo-form">
+        <label>Ícone (opcional)</label>
+        <input type="text" id="campo-categoria-icone" placeholder="assets/icones/exemplo.svg ou URL de uma imagem">
+        <small style="color:var(--tinta-suave)">Deixe em branco para usar um ícone padrão. Você pode subir um arquivo .svg/.png na pasta assets/icones do projeto e colocar o caminho aqui.</small>
+      </div>
+      <div class="rodape-modal">
+        <button type="button" class="btn btn-contorno" onclick="document.getElementById('modal-categoria').classList.remove('aberta')">Cancelar</button>
+        <button type="submit" class="btn btn-primario">Salvar categoria</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

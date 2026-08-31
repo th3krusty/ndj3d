@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+<defs>
+  <linearGradient id="coneCorpo" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#C79A5E"/>
+    <stop offset="100%" stop-color="#8A6B3D"/>
+  </linearGradient>
+  <filter id="sombraCone" x="-30%" y="-30%" width="160%" height="160%">
+    <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#1B1815" flood-opacity="0.28"/>
+  </filter>
+</defs>
+
+<ellipse cx="60" cy="103" rx="30" ry="7" fill="#1B1815" opacity="0.12"/>
+
+<g filter="url(#sombraCone)">
+  <path d="M50 46 L70 46 L64 96 L56 96 Z" fill="url(#coneCorpo)" stroke="#6B4F28" stroke-width="1"/>
+  <g stroke="#00000025" stroke-width="1">
+    <line x1="51.5" y1="56" x2="68.5" y2="56"/>
+    <line x1="53" y1="66" x2="67" y2="66"/>
+    <line x1="54.5" y1="76" x2="65.5" y2="76"/>
+    <line x1="55.5" y1="86" x2="64.5" y2="86"/>
+  </g>
+
+  <circle cx="60" cy="42" r="9" fill="#1B1815"/>
+  <circle cx="60" cy="42" r="9" fill="none" stroke="#000" stroke-opacity="0.3"/>
+
+  <circle cx="38" cy="30" r="5" fill="#B0473F"/>
+  <circle cx="55" cy="20" r="4" fill="#4C7A50"/>
+  <circle cx="74" cy="26" r="5.5" fill="#B08D57"/>
+  <circle cx="84" cy="42" r="4" fill="#3A342C"/>
+  <rect x="44" y="24" width="6" height="6" fill="#F4EEE2" transform="rotate(20 47 27)"/>
+  <rect x="66" y="16" width="5" height="5" fill="#B0473F" transform="rotate(-15 68 18)"/>
+</g>
+</svg>

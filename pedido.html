@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu pedido · NDJ 3D</title>
+<link rel="icon" href="assets/logo.jpg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-pagina="pedido">
+<div class="topo-aviso" id="ndj-topo-aviso"></div>
+<header class="cabecalho" id="ndj-cabecalho"></header>
+
+<section class="secao" id="bloco-confirmacao-pedido">
+  <div class="container">
+    <div class="caixa-confirmacao">
+      <div class="icone-check">✓</div>
+      <h1>Pedido confirmado!</h1>
+      <p>Enviamos os detalhes para <strong id="email-confirmacao"></strong>. Total pago: <strong id="total-confirmacao"></strong></p>
+      <div class="numero-pedido">📦 Pedido <span id="numero-pedido-valor"></span> · Rastreio <span id="codigo-rastreio-valor"></span></div>
+      <div class="linha-tempo" id="linha-do-tempo-pedido"></div>
+    </div>
+    <div id="bloco-avaliar-confirmacao"></div>
+  </div>
+</section>
+
+<section class="secao">
+  <div class="container">
+    <span class="eyebrow centro" style="justify-content:center">Já comprou com a gente?</span>
+    <h2 class="centro" style="margin:10px 0 24px">Rastrear meu pedido</h2>
+    <form id="form-rastreio" class="form-rastreio">
+      <input type="text" id="campo-rastreio-numero" placeholder="Digite o número do pedido (ex: NDJ123456)" required>
+      <button class="btn btn-primario" type="submit">Rastrear</button>
+    </form>
+    <div id="resultado-rastreio" style="max-width:560px; margin:0 auto"></div>
+    <div id="bloco-avaliar-rastreio" style="max-width:560px; margin:0 auto"></div>
+  </div>
+</section>
+
+<footer class="rodape" id="ndj-rodape"></footer>
+
+<div id="ndj-flutuantes"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/data.js"></script>
+<script src="js/config.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/main.js"></script>
+<script src="js/pedido.js"></script>
+</body>
+</html>

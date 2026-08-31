@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout · NDJ 3D</title>
+<link rel="icon" href="assets/logo.jpg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-pagina="checkout" data-nav="0" data-flutuantes="0" data-rodape="minimo">
+<div class="topo-aviso" id="ndj-topo-aviso"></div>
+<header class="cabecalho" id="ndj-cabecalho"></header>
+
+<section class="secao">
+  <div class="container">
+    <div class="passos-checkout">
+      <div class="passo">1. Carrinho</div>
+      <div class="passo ativo">2. Checkout</div>
+      <div class="passo">3. Confirmação</div>
+    </div>
+
+    <form id="form-checkout" class="grade-carrinho">
+      <div>
+        <h3>Dados para entrega</h3>
+        <div class="grade-2">
+          <div class="grupo-form"><label>Nome completo</label><input type="text" id="campo-nome-cliente" required></div>
+          <div class="grupo-form"><label>E-mail</label><input type="email" id="campo-email-cliente" required></div>
+        </div>
+        <div class="grade-2">
+          <div class="grupo-form"><label>Telefone / WhatsApp</label><input type="tel" id="campo-telefone-cliente" required></div>
+          <div class="grupo-form"><label>CEP</label>
+            <div style="display:flex; gap:8px">
+              <input type="text" id="campo-cep-checkout" placeholder="00000-000" required style="flex:1">
+              <button type="button" class="btn btn-contorno btn-pequeno" id="btn-calcular-frete-checkout">Calcular frete</button>
+            </div>
+          </div>
+        </div>
+        <div class="grupo-form"><label>Endereço (rua, número, complemento)</label><input type="text" id="campo-endereco-cliente" required></div>
+        <div class="grade-2">
+          <div class="grupo-form"><label>Cidade</label><input type="text" id="campo-cidade-cliente" required></div>
+          <div class="grupo-form"><label>Estado</label><input type="text" id="campo-estado-cliente" maxlength="2" placeholder="PR" required></div>
+        </div>
+
+        <div id="opcoes-frete-checkout" style="margin-bottom:24px"></div>
+
+        <h3>Forma de pagamento</h3>
+        <div class="opcoes-pagamento">
+          <div class="opcao-pagamento" data-metodo="pix">
+            <div class="icone">💠</div><strong>Pix</strong><div style="font-size:12px;color:var(--tinta-suave)">Aprovação imediata</div>
+          </div>
+          <div class="opcao-pagamento" data-metodo="cartao">
+            <div class="icone">💳</div><strong>Cartão</strong><div style="font-size:12px;color:var(--tinta-suave)">Até 3x sem juros</div>
+          </div>
+          <div class="opcao-pagamento" data-metodo="boleto">
+            <div class="icone">🧾</div><strong>Boleto</strong><div style="font-size:12px;color:var(--tinta-suave)">Compensação em até 2 dias</div>
+          </div>
+        </div>
+        <input type="hidden" id="metodo-pagamento-escolhido">
+
+        <div class="detalhes-pagamento" id="detalhes-pix">
+          <div class="caixa-pix">
+            <div class="qr-fake"></div>
+            <p>O QR Code Pix será gerado após a confirmação do pedido.</p>
+          </div>
+        </div>
+        <div class="detalhes-pagamento" id="detalhes-cartao">
+          <div class="grupo-form"><label>Número do cartão</label><input type="text" id="campo-cartao-numero" placeholder="0000 0000 0000 0000"></div>
+          <div class="grade-2">
+            <div class="grupo-form"><label>Nome impresso no cartão</label><input type="text" id="campo-cartao-nome"></div>
+            <div class="grade-2">
+              <div class="grupo-form"><label>Validade</label><input type="text" id="campo-cartao-validade" placeholder="MM/AA"></div>
+              <div class="grupo-form"><label>CVV</label><input type="text" id="campo-cartao-cvv" placeholder="123"></div>
+            </div>
+          </div>
+        </div>
+        <div class="detalhes-pagamento" id="detalhes-boleto">
+          <p>O boleto será gerado após a confirmação e enviado para o seu e-mail.</p>
+        </div>
+
+        <p style="font-size:12px; color:var(--tinta-suave); margin-top:6px">
+          Ambiente de demonstração: o pagamento acima é simulado. Em produção, conecte um gateway de pagamento real (Pix/cartão/boleto) antes de aceitar pedidos de verdade.
+        </p>
+      </div>
+
+      <div>
+        <div class="caixa-resumo">
+          <h3 style="margin-bottom:16px">Resumo do pedido</h3>
+          <div id="resumo-itens-checkout" style="margin-bottom:14px"></div>
+          <div class="linha"><span>Subtotal</span><span id="checkout-subtotal">R$ 0,00</span></div>
+          <div class="linha" id="linha-checkout-desconto" style="display:none"><span>Desconto</span><span id="checkout-desconto">R$ 0,00</span></div>
+          <div class="linha"><span>Frete</span><span id="checkout-frete">Calcule ao lado</span></div>
+          <div class="linha total"><span>Total</span><span id="checkout-total">R$ 0,00</span></div>
+          <button type="submit" class="btn btn-primario btn-bloco" style="margin-top:16px" id="btn-confirmar-pedido">Confirmar e pagar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<footer class="rodape" id="ndj-rodape"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/data.js"></script>
+<script src="js/config.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/main.js"></script>
+<script src="js/checkout.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+<defs>
+  <linearGradient id="casaTelhado" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#1B1815"/>
+    <stop offset="100%" stop-color="#241F1A"/>
+  </linearGradient>
+  <linearGradient id="casaCorpo" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#F4EEE2"/>
+    <stop offset="100%" stop-color="#D8BD8E"/>
+  </linearGradient>
+  <filter id="sombraCasa" x="-30%" y="-30%" width="160%" height="160%">
+    <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#1B1815" flood-opacity="0.28"/>
+  </filter>
+</defs>
+
+<ellipse cx="60" cy="103" rx="32" ry="7" fill="#1B1815" opacity="0.12"/>
+
+<g filter="url(#sombraCasa)">
+  <rect x="30" y="60" width="60" height="38" rx="3" fill="url(#casaCorpo)" stroke="#8A6B3D" stroke-width="1"/>
+  <g stroke="#00000018" stroke-width="1">
+    <line x1="30" y1="67" x2="90" y2="67"/>
+    <line x1="30" y1="74" x2="90" y2="74"/>
+    <line x1="30" y1="81" x2="90" y2="81"/>
+    <line x1="30" y1="88" x2="90" y2="88"/>
+  </g>
+
+  <polygon points="60,26 96,60 24,60" fill="url(#casaTelhado)"/>
+  <polygon points="60,26 96,60 24,60" fill="none" stroke="#000" stroke-opacity="0.3" stroke-width="1"/>
+  <line x1="60" y1="26" x2="60" y2="60" stroke="#000" stroke-opacity="0.2" stroke-width="1"/>
+
+  <rect x="42" y="72" width="14" height="26" fill="#B0473F"/>
+  <rect x="42" y="72" width="14" height="26" fill="none" stroke="#6B4F28" stroke-width="1"/>
+  <rect x="68" y="70" width="12" height="12" fill="#B08D57"/>
+  <rect x="68" y="70" width="12" height="12" fill="none" stroke="#6B4F28" stroke-width="1"/>
+  <line x1="74" y1="70" x2="74" y2="82" stroke="#6B4F28" stroke-width="1"/>
+  <line x1="68" y1="76" x2="80" y2="76" stroke="#6B4F28" stroke-width="1"/>
+</g>
+</svg>

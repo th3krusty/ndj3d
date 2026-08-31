@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Produtos · NDJ 3D</title>
+<link rel="icon" href="assets/logo.jpg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-pagina="produtos">
+<div class="topo-aviso" id="ndj-topo-aviso"></div>
+<header class="cabecalho" id="ndj-cabecalho"></header>
+
+<section class="secao" style="padding-top:36px">
+  <div class="container">
+    <span class="eyebrow">Loja completa</span>
+    <h1 style="margin:10px 0 22px">Todos os produtos</h1>
+
+    <div style="display:flex; gap:16px; align-items:center; margin-bottom:20px; flex-wrap:wrap;">
+      <input type="search" id="campo-busca-produtos" placeholder="Buscar produto..." style="flex:1; min-width:220px; padding:11px 14px; border:1px solid var(--linha); border-radius:20px;">
+    </div>
+
+    <div class="filtros-categoria" id="filtros-categoria"></div>
+    <p id="contador-resultados" style="color:var(--tinta-suave); font-size:13.5px; margin-bottom:18px;"></p>
+    <div class="grade-produtos" id="grade-produtos-todos"></div>
+  </div>
+</section>
+
+<footer class="rodape" id="ndj-rodape"></footer>
+
+<div id="ndj-flutuantes"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/data.js"></script>
+<script src="js/config.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
