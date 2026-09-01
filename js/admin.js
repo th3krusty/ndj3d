@@ -6,6 +6,10 @@
    ========================================================================== */
 
 let ndjCoresEmEdicao = [];
+/* Cada posição (0 a 4) guarda: null (vazio), { url: '...' } (foto já salva
+   no Supabase Storage) ou { arquivo: File, preview: 'blob:...' } (foto nova
+   escolhida do dispositivo, ainda não enviada). */
+let ndjImagensEmEdicao = [null, null, null, null, null];
 
 document.addEventListener('DOMContentLoaded', async () => {
   if(await ndjAdminLogado()){
@@ -41,6 +45,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('btn-novo-produto').addEventListener('click', () => ndjAbrirModalProduto(null));
   document.getElementById('form-produto-admin').addEventListener('submit', ndjSalvarProdutoAdmin);
   document.getElementById('fechar-modal-produto').addEventListener('click', ndjFecharModalProduto);
+
+  for(let i=0; i<5; i++){
+    document.getElementById('campo-imagem-' + i).addEventListener('change', (e) => ndjSelecionarImagemProduto(i, e.target.files[0]));
+    document.getElementById('remover-imagem-' + i).addEventListener('click', (e) => {
+      e.preventDefault();
+      ndjRemoverImagemProduto(i);
+    });
+  }
   document.getElementById('btn-add-cor').addEventListener('click', ndjAdicionarCorEdicao);
   document.getElementById('check-personalizacao-admin').addEventListener('change', (e) => {
     document.getElementById('campos-personalizacao-admin').style.display = e.target.checked ? 'grid' : 'none';
@@ -159,9 +171,8 @@ function ndjAbrirModalProduto(id){
   document.getElementById('campo-produto-caracteristicas').value = produto ? produto.caracteristicas.join('\n') : '';
 
   const imagens = produto ? produto.imagens : [];
-  for(let i=0; i<5; i++){
-    document.getElementById('campo-imagem-' + i).value = imagens[i] || '';
-  }
+  ndjImagensEmEdicao = [0,1,2,3,4].map(i => imagens[i] ? { url: imagens[i] } : null);
+  ndjRenderizarImagensEdicao();
 
   ndjCoresEmEdicao = produto ? JSON.parse(JSON.stringify(produto.cores)) : [];
   ndjRenderizarCoresEdicao();
@@ -178,6 +189,56 @@ function ndjAbrirModalProduto(id){
 
 function ndjFecharModalProduto(){
   document.getElementById('modal-produto').classList.remove('aberta');
+  ndjLimparPreviewsImagens();
+}
+
+/* ---------------- Fotos do produto (upload do dispositivo → Supabase Storage) ---------------- */
+function ndjRenderizarImagensEdicao(){
+  for(let i=0; i<5; i++){
+    const item = ndjImagensEmEdicao[i];
+    const img = document.getElementById('preview-imagem-' + i);
+    const botaoRemover = document.getElementById('remover-imagem-' + i);
+    const urlPreview = item ? (item.preview || item.url) : '';
+    if(urlPreview){
+      img.src = urlPreview;
+      img.style.display = 'block';
+      botaoRemover.style.display = 'flex';
+    } else {
+      img.removeAttribute('src');
+      img.style.display = 'none';
+      botaoRemover.style.display = 'none';
+    }
+  }
+}
+
+function ndjSelecionarImagemProduto(indice, arquivo){
+  if(!arquivo) return;
+  if(!arquivo.type.startsWith('image/')){
+    ndjMostrarAviso('Escolha um arquivo de imagem (jpg, png, webp...).', 'erro');
+    return;
+  }
+  if(arquivo.size > 5 * 1024 * 1024){
+    ndjMostrarAviso('Essa foto passa de 5MB. Escolha uma imagem menor.', 'erro');
+    return;
+  }
+  const anterior = ndjImagensEmEdicao[indice];
+  if(anterior && anterior.preview) URL.revokeObjectURL(anterior.preview);
+  ndjImagensEmEdicao[indice] = { arquivo, preview: URL.createObjectURL(arquivo) };
+  ndjRenderizarImagensEdicao();
+}
+
+function ndjRemoverImagemProduto(indice){
+  const item = ndjImagensEmEdicao[indice];
+  if(item && item.preview) URL.revokeObjectURL(item.preview);
+  ndjImagensEmEdicao[indice] = null;
+  document.getElementById('campo-imagem-' + indice).value = '';
+  ndjRenderizarImagensEdicao();
+}
+
+function ndjLimparPreviewsImagens(){
+  ndjImagensEmEdicao.forEach(item => { if(item && item.preview) URL.revokeObjectURL(item.preview); });
+  ndjImagensEmEdicao = [null, null, null, null, null];
+  for(let i=0; i<5; i++) document.getElementById('campo-imagem-' + i).value = '';
 }
 
 function ndjRenderizarCoresEdicao(){
@@ -204,19 +265,33 @@ function ndjAdicionarCorEdicao(){
 async function ndjSalvarProdutoAdmin(e){
   e.preventDefault();
   const idExistente = document.getElementById('campo-produto-id').value;
-  const imagens = [];
-  for(let i=0;i<5;i++){
-    const v = document.getElementById('campo-imagem-' + i).value.trim();
-    if(v) imagens.push(v);
-  }
-  if(imagens.length < 1){
+  const temAlgumaFoto = ndjImagensEmEdicao.some(Boolean);
+  if(!temAlgumaFoto){
     ndjMostrarAviso('Adicione pelo menos 1 foto (o ideal são 5).', 'erro');
     return;
   }
   const personalizacaoAtiva = document.getElementById('check-personalizacao-admin').checked;
+  const id = idExistente || ndjGerarIdProduto();
+
+  const botao = e.target.querySelector('button[type=submit]');
+  if(botao) botao.disabled = true;
+
+  let imagens;
+  try {
+    imagens = await ndjEnviarImagensProduto(id);
+  } catch (err) {
+    ndjMostrarAviso('Não foi possível enviar as fotos: ' + err.message, 'erro');
+    if(botao) botao.disabled = false;
+    return;
+  }
+  if(imagens.length < 1){
+    ndjMostrarAviso('Adicione pelo menos 1 foto (o ideal são 5).', 'erro');
+    if(botao) botao.disabled = false;
+    return;
+  }
 
   const produto = {
-    id: idExistente || ndjGerarIdProduto(),
+    id,
     nome: document.getElementById('campo-produto-nome').value.trim(),
     categoria: document.getElementById('campo-produto-categoria').value,
     preco: parseFloat(document.getElementById('campo-produto-preco').value) || 0,
@@ -235,9 +310,6 @@ async function ndjSalvarProdutoAdmin(e){
     shopeeUrl: document.getElementById('campo-produto-shopee').value.trim() || 'https://shopee.com.br/'
   };
 
-  const botao = e.target.querySelector('button[type=submit]');
-  if(botao) botao.disabled = true;
-
   try {
     await ndjSalvarProduto(produto);
     ndjFecharModalProduto();
@@ -249,6 +321,23 @@ async function ndjSalvarProdutoAdmin(e){
   } finally {
     if(botao) botao.disabled = false;
   }
+}
+
+/* Percorre as 5 posições: fotos já salvas (só reaproveita a URL) e fotos
+   novas (faz upload pro Supabase Storage e pega a URL pública de volta). */
+async function ndjEnviarImagensProduto(produtoId){
+  const urls = [];
+  for(let i=0; i<5; i++){
+    const item = ndjImagensEmEdicao[i];
+    if(!item) continue;
+    if(item.url){
+      urls.push(item.url);
+    } else if(item.arquivo){
+      const url = await ndjEnviarFotoProduto(produtoId, i, item.arquivo);
+      urls.push(url);
+    }
+  }
+  return urls;
 }
 
 /* ---------------- Cupons ---------------- */

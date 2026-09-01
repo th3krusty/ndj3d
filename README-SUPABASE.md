@@ -38,7 +38,41 @@ const SUPABASE_ANON_KEY = 'eyJ...';
 navegador mesmo, sem problema. Nunca use a chave `service_role` no código
 do site (essa é secreta).
 
-## 4. Criar o usuário administrador (login do painel /admin.html)
+## 4. Criar o bucket de fotos dos produtos (Storage)
+
+O painel admin agora envia as fotos dos produtos direto do celular/computador
+para o Supabase (em vez de pedir um link). Para isso funcionar, o bucket
+`produtos-imagens` precisa existir:
+
+- **Se você já rodou o `schema.sql` completo antes** (projeto já existia):
+  não rode o arquivo inteiro de novo (ele vai reclamar de política
+  duplicada). Copie só o trecho abaixo, que também está no final do
+  `supabase/schema.sql`, e rode ele sozinho no **SQL Editor**:
+
+  ```sql
+  insert into storage.buckets (id, name, public)
+  values ('produtos-imagens', 'produtos-imagens', true)
+  on conflict (id) do nothing;
+
+  create policy "produtos_imagens_select_publica" on storage.objects
+    for select using (bucket_id = 'produtos-imagens');
+  create policy "produtos_imagens_insert_admin" on storage.objects
+    for insert to authenticated with check (bucket_id = 'produtos-imagens');
+  create policy "produtos_imagens_update_admin" on storage.objects
+    for update to authenticated using (bucket_id = 'produtos-imagens');
+  create policy "produtos_imagens_delete_admin" on storage.objects
+    for delete to authenticated using (bucket_id = 'produtos-imagens');
+  ```
+
+- **Se é um projeto novo**: já está incluído no `supabase/schema.sql`, então
+  basta ter seguido o passo 2 acima.
+
+No painel admin, ao cadastrar ou editar um produto, toque em cada quadradinho
+de foto para escolher uma imagem do dispositivo — ela é enviada para esse
+bucket assim que você salvar o produto, e a URL pública fica guardada em
+`produtos.imagens`, exatamente como antes.
+
+## 5. Criar o usuário administrador (login do painel /admin.html)
 
 O login do painel agora usa o **Supabase Auth** em vez da senha fixa
 `ndj3d2026` que ficava salva no navegador.
@@ -61,7 +95,7 @@ const NDJ_ADMIN_EMAIL = 'admin@ndj3d.com.br';
 Se quiser trocar a senha depois, use a tela **Configurações** dentro do
 próprio painel admin (ela agora chama o Supabase Auth por trás).
 
-## 5. Publicar no Vercel (ou onde você já hospeda o site)
+## 6. Publicar no Vercel (ou onde você já hospeda o site)
 
 Nada muda aqui — continua sendo um site 100% estático (HTML/CSS/JS puro).
 Basta fazer o deploy da pasta normalmente (ex: `vercel --prod`, ou arrastar
@@ -77,6 +111,9 @@ pelo navegador de cada visitante.
   "rascunho" de compra de quem está navegando naquele momento).
 - O login do admin passou a usar Supabase Auth (mais seguro que a senha
   simples salva no navegador de antes).
+- As fotos dos produtos agora são enviadas do dispositivo (celular ou
+  computador) direto pelo painel admin, em vez de colar um link — elas ficam
+  guardadas no bucket `produtos-imagens` do Supabase Storage.
 
 ## Sobre segurança (leia antes de vender de verdade)
 

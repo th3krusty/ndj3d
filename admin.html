@@ -170,12 +170,48 @@
 
       <label style="font-size:13px; font-weight:600; display:block; margin-bottom:8px;">Fotos do anúncio (recomendado: 5 fotos)</label>
       <div class="campos-imagens-admin">
-        <input type="url" id="campo-imagem-0" placeholder="URL da foto 1 (principal)">
-        <input type="url" id="campo-imagem-1" placeholder="URL da foto 2">
-        <input type="url" id="campo-imagem-2" placeholder="URL da foto 3">
-        <input type="url" id="campo-imagem-3" placeholder="URL da foto 4">
-        <input type="url" id="campo-imagem-4" placeholder="URL da foto 5">
+        <div class="campo-upload-imagem" data-indice="0">
+          <label class="preview-upload-imagem" for="campo-imagem-0">
+            <img id="preview-imagem-0" style="display:none;" alt="">
+            <span class="rotulo-upload-imagem">Foto 1<br><small>(principal)</small></span>
+          </label>
+          <input type="file" accept="image/*" id="campo-imagem-0" class="input-arquivo-imagem" hidden>
+          <button type="button" class="btn-remover-imagem" id="remover-imagem-0" style="display:none;" title="Remover foto">&times;</button>
+        </div>
+        <div class="campo-upload-imagem" data-indice="1">
+          <label class="preview-upload-imagem" for="campo-imagem-1">
+            <img id="preview-imagem-1" style="display:none;" alt="">
+            <span class="rotulo-upload-imagem">Foto 2</span>
+          </label>
+          <input type="file" accept="image/*" id="campo-imagem-1" class="input-arquivo-imagem" hidden>
+          <button type="button" class="btn-remover-imagem" id="remover-imagem-1" style="display:none;" title="Remover foto">&times;</button>
+        </div>
+        <div class="campo-upload-imagem" data-indice="2">
+          <label class="preview-upload-imagem" for="campo-imagem-2">
+            <img id="preview-imagem-2" style="display:none;" alt="">
+            <span class="rotulo-upload-imagem">Foto 3</span>
+          </label>
+          <input type="file" accept="image/*" id="campo-imagem-2" class="input-arquivo-imagem" hidden>
+          <button type="button" class="btn-remover-imagem" id="remover-imagem-2" style="display:none;" title="Remover foto">&times;</button>
+        </div>
+        <div class="campo-upload-imagem" data-indice="3">
+          <label class="preview-upload-imagem" for="campo-imagem-3">
+            <img id="preview-imagem-3" style="display:none;" alt="">
+            <span class="rotulo-upload-imagem">Foto 4</span>
+          </label>
+          <input type="file" accept="image/*" id="campo-imagem-3" class="input-arquivo-imagem" hidden>
+          <button type="button" class="btn-remover-imagem" id="remover-imagem-3" style="display:none;" title="Remover foto">&times;</button>
+        </div>
+        <div class="campo-upload-imagem" data-indice="4">
+          <label class="preview-upload-imagem" for="campo-imagem-4">
+            <img id="preview-imagem-4" style="display:none;" alt="">
+            <span class="rotulo-upload-imagem">Foto 5</span>
+          </label>
+          <input type="file" accept="image/*" id="campo-imagem-4" class="input-arquivo-imagem" hidden>
+          <button type="button" class="btn-remover-imagem" id="remover-imagem-4" style="display:none;" title="Remover foto">&times;</button>
+        </div>
       </div>
+      <p id="aviso-upload-imagens" style="font-size:12px; color:var(--tinta-suave); margin:-6px 0 14px;">Toque em um quadro para escolher uma foto do seu dispositivo.</p>
 
       <label style="font-size:13px; font-weight:600; display:block; margin-bottom:8px;">Cores disponíveis</label>
       <div class="grade-cores-admin" id="lista-cores-admin"></div>

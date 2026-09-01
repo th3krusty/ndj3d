@@ -127,6 +127,25 @@ create policy "avaliacoes_insert_publica" on public.avaliacoes for insert with c
 create policy "avaliacoes_delete_admin" on public.avaliacoes for delete to authenticated using (true);
 
 -- ==========================================================================
+-- Storage — bucket para as fotos dos produtos (upload direto do dispositivo
+-- no painel admin, em vez de colar um link). Leitura pública (para as fotos
+-- aparecerem no site) e escrita só para o admin autenticado.
+-- ==========================================================================
+
+insert into storage.buckets (id, name, public)
+values ('produtos-imagens', 'produtos-imagens', true)
+on conflict (id) do nothing;
+
+create policy "produtos_imagens_select_publica" on storage.objects
+  for select using (bucket_id = 'produtos-imagens');
+create policy "produtos_imagens_insert_admin" on storage.objects
+  for insert to authenticated with check (bucket_id = 'produtos-imagens');
+create policy "produtos_imagens_update_admin" on storage.objects
+  for update to authenticated using (bucket_id = 'produtos-imagens');
+create policy "produtos_imagens_delete_admin" on storage.objects
+  for delete to authenticated using (bucket_id = 'produtos-imagens');
+
+-- ==========================================================================
 -- Dados iniciais (mesmo catálogo de demonstração que já vinha no site)
 -- Apague ou edite à vontade depois pelo painel admin.
 -- ==========================================================================

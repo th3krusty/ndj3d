@@ -177,6 +177,27 @@ function ndjGerarIdProduto(){
   return 'p' + Date.now().toString().slice(-8);
 }
 
+/* ---------- Fotos dos produtos (Supabase Storage) ----------
+   As fotos escolhidas no painel admin (direto do dispositivo, sem link)
+   são enviadas para o bucket "produtos-imagens" e a URL pública devolvida
+   é o que fica salvo em produtos.imagens (veja supabase/schema.sql para
+   criar o bucket e as permissões). */
+const NDJ_BUCKET_IMAGENS_PRODUTOS = 'produtos-imagens';
+
+async function ndjEnviarFotoProduto(produtoId, indice, arquivo){
+  const extensao = (arquivo.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg';
+  const caminho = `${produtoId}/${indice}-${Date.now()}.${extensao}`;
+
+  const { error } = await ndjSupabase.storage
+    .from(NDJ_BUCKET_IMAGENS_PRODUTOS)
+    .upload(caminho, arquivo, { cacheControl: '3600', upsert: true });
+
+  if(error){ console.error('Erro ao enviar foto do produto:', error); throw error; }
+
+  const { data } = ndjSupabase.storage.from(NDJ_BUCKET_IMAGENS_PRODUTOS).getPublicUrl(caminho);
+  return data.publicUrl;
+}
+
 /* ---------- Cupons ---------- */
 function ndjListarCupons(){
   return ndjCache.cupons;
