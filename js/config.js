@@ -10,7 +10,7 @@ const NDJ_CONFIG = {
   slogan: 'Ideias que ganham forma',
 
   // Faixa de aviso no topo do site
-  topoAviso: 'Aproveite 10% de desconto em todos os produtos com o cupom BEMVINDO10',
+  topoAviso: 'Estamos aceitando encomendas de enfeites natalinos! Veja na categoria NATAL.',
 
   // Contato / redes sociais (usados no rodapé e nos botões flutuantes)
   whatsappNumero: '5546988372988',       // formato internacional, só números
