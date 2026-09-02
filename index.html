@@ -3,78 +3,129 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NDJ 3D · Ideias que ganham forma</title>
-<meta name="description" content="Produtos personalizados em impressão 3D: presentes, utilidades, lembrancinhas e decoração.">
+<title>NDJ 3D · Em breve</title>
+<meta name="description" content="A loja da NDJ 3D está a caminho. Enquanto isso, siga a gente no Instagram.">
 <link rel="icon" href="assets/logo.jpg">
-<link rel="stylesheet" href="css/style.css">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap');
+
+  :root{
+    --creme: #F4EEE2;
+    --creme-2: #FBF8F2;
+    --tinta: #1B1815;
+    --tinta-suave: #3A342C;
+    --bronze: #B08D57;
+    --bronze-escuro: #8A6B3D;
+    --linha: #DFD5BF;
+    --fonte-display: 'Oswald', sans-serif;
+    --fonte-corpo: 'Work Sans', sans-serif;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--creme);
+    color: var(--tinta);
+    font-family: var(--fonte-corpo);
+    padding: 24px;
+  }
+
+  .cartao{
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    background: var(--creme-2);
+    border: 1px solid var(--linha);
+    border-radius: 8px;
+    padding: 48px 32px;
+    box-shadow: 0 10px 30px rgba(27,24,21,0.08);
+  }
+
+  .logo{
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid var(--bronze);
+    margin-bottom: 24px;
+  }
+
+  .eyebrow{
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--bronze-escuro);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  h1{
+    font-family: var(--fonte-display);
+    font-weight: 600;
+    font-size: clamp(28px, 6vw, 38px);
+    margin: 0 0 16px;
+    letter-spacing: 0.01em;
+  }
+
+  p{
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--tinta-suave);
+    margin: 0 0 32px;
+  }
+
+  .btn-instagram{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--tinta);
+    color: var(--creme-2);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 14px 28px;
+    border-radius: 4px;
+    transition: background .15s ease, transform .15s ease;
+  }
+
+  .btn-instagram:hover{
+    background: var(--bronze-escuro);
+    transform: translateY(-1px);
+  }
+
+  .btn-instagram svg{ width: 18px; height: 18px; flex-shrink: 0; }
+
+  .rodape{
+    margin-top: 28px;
+    font-size: 13px;
+    color: var(--tinta-suave);
+    opacity: 0.75;
+  }
+</style>
 </head>
-<body data-pagina="index">
+<body>
 
-<div class="topo-aviso" id="ndj-topo-aviso"></div>
+  <div class="cartao">
+    <img class="logo" src="assets/logo.jpg" alt="Logo NDJ 3D">
+    <span class="eyebrow">Novidade a caminho</span>
+    <h1>Em breve, nossa loja completa por aqui</h1>
+    <p>Estamos preparando tudo com carinho para trazer nossos produtos personalizados em impressão 3D pra você. Enquanto isso, nos siga no Instagram:</p>
 
-<header class="cabecalho" id="ndj-cabecalho"></header>
+    <a class="btn-instagram" href="https://www.instagram.com/ndj.3d/" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2c-2.72 0-3.06.01-4.12.06-1.06.05-1.79.22-2.43.47-.66.26-1.22.6-1.77 1.16-.56.55-.9 1.11-1.16 1.77-.25.64-.42 1.37-.47 2.43C2 8.94 2 9.28 2 12s.01 3.06.06 4.12c.05 1.06.22 1.79.47 2.43.26.66.6 1.22 1.16 1.77.55.56 1.11.9 1.77 1.16.64.25 1.37.42 2.43.47C8.94 22 9.28 22 12 22s3.06-.01 4.12-.06c1.06-.05 1.79-.22 2.43-.47.66-.26 1.22-.6 1.77-1.16.56-.55.9-1.11 1.16-1.77.25-.64.42-1.37.47-2.43.05-1.06.06-1.4.06-4.12s-.01-3.06-.06-4.12c-.05-1.06-.22-1.79-.47-2.43-.26-.66-.6-1.22-1.16-1.77-.55-.56-1.11-.9-1.77-1.16-.64-.25-1.37-.42-2.43-.47C15.06 2.01 14.72 2 12 2Zm0 1.8c2.67 0 2.99.01 4.04.06.98.04 1.5.21 1.85.34.47.18.8.4 1.15.75.35.35.57.68.75 1.15.13.35.3.87.34 1.85.05 1.05.06 1.37.06 4.04s-.01 2.99-.06 4.04c-.04.98-.21 1.5-.34 1.85-.18.47-.4.8-.75 1.15-.35.35-.68.57-1.15.75-.35.13-.87.3-1.85.34-1.05.05-1.37.06-4.04.06s-2.99-.01-4.04-.06c-.98-.04-1.5-.21-1.85-.34-.47-.18-.8-.4-1.15-.75-.35-.35-.57-.68-.75-1.15-.13-.35-.3-.87-.34-1.85C3.81 14.99 3.8 14.67 3.8 12s.01-2.99.06-4.04c.04-.98.21-1.5.34-1.85.18-.47.4-.8.75-1.15.35-.35.68-.57 1.15-.75.35-.13.87-.3 1.85-.34C9.01 3.81 9.33 3.8 12 3.8Zm0 3.25a4.95 4.95 0 1 0 0 9.9 4.95 4.95 0 0 0 0-9.9Zm0 8.17a3.22 3.22 0 1 1 0-6.44 3.22 3.22 0 0 1 0 6.44Zm5.15-8.36a1.16 1.16 0 1 1-2.31 0 1.16 1.16 0 0 1 2.31 0Z"/>
+      </svg>
+      @NDJ.3D
+    </a>
 
-<section class="hero">
-  <div class="container">
-    <div>
-      <span class="eyebrow">Impressão 3D personalizada</span>
-      <h1>Suas <em>ideias</em> ganham forma em cada peça</h1>
-      <p>Presentes, lembrancinhas, brinquedos sensoriais e chaveiros impressos sob medida — com opção de cor e personalização com nome. Feito com muito cuidado, camada por camada.</p>
-      <div class="hero-botoes">
-        <a href="produtos.html" class="btn btn-bronze">Ver todos os produtos</a>
-        <a href="#categorias" class="btn btn-contorno">Explorar categorias</a>
-      </div>
-    </div>
-    <div class="hero-arte">
-      <img src="assets/capa.webp" alt="NDJ 3D">
-    </div>
+    <p class="rodape">NDJ 3D · Impressão 3D personalizada</p>
   </div>
-  <div class="container"><div class="camadas"></div></div>
-</section>
 
-<section class="secao" id="categorias">
-  <div class="container">
-    <div class="secao-topo">
-      <div>
-        <span class="eyebrow">Categorias</span>
-        <h2>O que você procura?</h2>
-      </div>
-    </div>
-    <div class="grade-categorias" id="grade-categorias-home"></div>
-  </div>
-</section>
-
-<section class="faixa-confianca">
-  <div class="container">
-    <div class="item-confianca"><span class="icone">🎨</span><div><strong>Cores à sua escolha</strong>Vários tons por produto</div></div>
-    <div class="item-confianca"><span class="icone">✒️</span><div><strong>Personalização com nome</strong>Deixe único do seu jeito</div></div>
-    <div class="item-confianca"><span class="icone">🚚</span><div><strong>Frete para todo o Brasil</strong>Cálculo direto no produto</div></div>
-    <div class="item-confianca"><span class="icone">🔒</span><div><strong>Pagamento online seguro</strong>Pix, cartão e boleto</div></div>
-  </div>
-</section>
-
-<section class="secao">
-  <div class="container">
-    <div class="secao-topo">
-      <div>
-        <span class="eyebrow">Destaques</span>
-        <h2>Mais procurados</h2>
-      </div>
-      <a href="produtos.html" class="btn btn-contorno btn-pequeno">Ver todos</a>
-    </div>
-    <div class="grade-produtos" id="grade-destaques"></div>
-  </div>
-</section>
-
-<footer class="rodape" id="ndj-rodape"></footer>
-
-<div id="ndj-flutuantes"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="js/supabaseClient.js"></script>
-<script src="js/data.js"></script>
-<script src="js/config.js"></script>
-<script src="js/layout.js"></script>
-<script src="js/main.js"></script>
 </body>
 </html>
