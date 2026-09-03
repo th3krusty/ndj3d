@@ -19,6 +19,7 @@ const NDJ_CONFIG = {
   instagramUrl: 'https://www.instagram.com/ndj.3d/',
   email: 'ndj3d@outlook.com',
   localizacao: '',
+  regiaoLocal: 'Chopinzinho e Região',
 
   // Crédito de desenvolvimento (linha final do rodapé)
   creditoNome: 'TH3KRUSTY Labs',

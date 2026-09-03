@@ -11,6 +11,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 /* O menu mobile agora é montado em js/layout.js, junto com o cabeçalho. */
 
+/* ---------- Aviso de entrega/retirada combinada (Chopinzinho e Região) ----------
+   Reutilizado na página de produto e no carrinho. */
+function ndjMontarAvisoRetiradaLocal(idAlvo){
+  const alvo = document.getElementById(idAlvo);
+  if(!alvo) return;
+  alvo.innerHTML = `📍 É de <strong>${NDJ_CONFIG.regiaoLocal}</strong>? A entrega ou retirada também pode ser combinada direto pelo
+    <a href="https://wa.me/${NDJ_CONFIG.whatsappNumero}" target="_blank" rel="noopener">WhatsApp</a>, sem pagar frete calculado.`;
+}
+
 function ndjMostrarAviso(mensagem, tipo){
   let caixa = document.querySelector('.aviso-flutuante');
   if(!caixa){

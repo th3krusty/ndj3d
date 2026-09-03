@@ -1,9 +1,11 @@
 /* ==========================================================================
    NDJ 3D — Lógica do checkout
-   ATENÇÃO: o pagamento aqui é SIMULADO para fins de demonstração do fluxo
-   de compra. Para receber pagamentos de verdade, integre um gateway real
-   (ex.: Mercado Pago, PagSeguro, Stripe) no backend antes de confirmar
-   o pedido — ver README.md do projeto.
+   O pagamento é processado de verdade pelo Mercado Pago: este arquivo só
+   monta o pedido (status "pendente") e chama a Edge Function
+   "criar-preferencia-mp", que cria a cobrança no Mercado Pago e devolve o
+   link de pagamento (init_point) para onde o cliente é redirecionado.
+   A confirmação do pagamento em si chega depois, via webhook, na Edge
+   Function "webhook-mp" — ver supabase/functions e o README.
    ========================================================================== */
 
 let ndjFreteEscolhido = null;
@@ -18,11 +20,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   const cupomSalvo = sessionStorage.getItem('ndj3d_cupom_checkout');
   window._ndjCupomCheckout = cupomSalvo ? JSON.parse(cupomSalvo) : null;
 
+  document.getElementById('texto-regiao-local').textContent = NDJ_CONFIG.regiaoLocal;
+
   ndjRenderizarResumoCheckout();
-  ndjLigarSelecaoPagamento();
+  ndjLigarCombinarLocal();
 
   document.getElementById('btn-calcular-frete-checkout').addEventListener('click', ndjCalcularFreteCheckout);
   document.getElementById('form-checkout').addEventListener('submit', ndjFinalizarPedido);
+
+  if(ndjParametroUrl('falha') === '1'){
+    ndjMostrarAviso('O pagamento não foi concluído. Você pode tentar novamente.', 'erro');
+  }
 });
 
 function ndjRenderizarResumoCheckout(){
@@ -36,6 +44,36 @@ function ndjRenderizarResumoCheckout(){
 
 function ndjPesoTotalCarrinho(){
   return ndjLerCarrinho().reduce((s,i) => s + (i.pesoKg||0.1) * i.quantidade, 0);
+}
+
+/* ---------- Combinar entrega/retirada local (Chopinzinho e Região) ----------
+   Quando marcado, dispensa o cálculo de frete (fica "a combinar" e sem
+   custo) e deixa endereço/CEP opcionais — o cliente já vai combinar tudo
+   pelo WhatsApp depois. */
+function ndjLigarCombinarLocal(){
+  const check = document.getElementById('check-combinar-local');
+  const camposEndereco = ['campo-endereco-cliente', 'campo-cidade-cliente', 'campo-estado-cliente', 'campo-cep-checkout'];
+
+  check.addEventListener('change', () => {
+    const combinar = check.checked;
+    document.getElementById('opcoes-frete-checkout').style.display = combinar ? 'none' : 'block';
+    document.getElementById('campo-cep-checkout').closest('.grupo-form').style.opacity = combinar ? 0.5 : 1;
+    document.getElementById('btn-calcular-frete-checkout').disabled = combinar;
+
+    camposEndereco.forEach(id => {
+      const campo = document.getElementById(id);
+      campo.required = !combinar;
+      campo.disabled = combinar;
+    });
+
+    if(combinar){
+      ndjFreteEscolhido = { nome: 'Combinar via WhatsApp', preco: 0, combinarWhatsapp: true };
+      document.getElementById('opcoes-frete-checkout').innerHTML = '';
+    } else {
+      ndjFreteEscolhido = null;
+    }
+    ndjAtualizarTotaisCheckout();
+  });
 }
 
 function ndjCalcularFreteCheckout(){
@@ -74,49 +112,23 @@ function ndjAtualizarTotaisCheckout(){
   document.getElementById('checkout-subtotal').textContent = ndjFormatarMoeda(subtotal);
   document.getElementById('checkout-desconto').textContent = '- ' + ndjFormatarMoeda(desconto);
   document.getElementById('linha-checkout-desconto').style.display = desconto ? 'flex' : 'none';
-  document.getElementById('checkout-frete').textContent = ndjFreteEscolhido ? ndjFormatarMoeda(frete) : 'Calcule acima';
+  document.getElementById('checkout-frete').textContent = ndjFreteEscolhido
+    ? (ndjFreteEscolhido.combinarWhatsapp ? 'A combinar' : ndjFormatarMoeda(frete))
+    : 'Calcule acima';
   document.getElementById('checkout-total').textContent = ndjFormatarMoeda(total);
-}
-
-function ndjLigarSelecaoPagamento(){
-  const opcoes = document.querySelectorAll('.opcao-pagamento');
-  opcoes.forEach(op => {
-    op.addEventListener('click', () => {
-      opcoes.forEach(o => o.classList.remove('selecionada'));
-      op.classList.add('selecionada');
-      document.querySelectorAll('.detalhes-pagamento').forEach(d => d.classList.remove('ativa'));
-      document.getElementById('detalhes-' + op.dataset.metodo).classList.add('ativa');
-      document.getElementById('metodo-pagamento-escolhido').value = op.dataset.metodo;
-    });
-  });
 }
 
 async function ndjFinalizarPedido(e){
   e.preventDefault();
 
   if(!ndjFreteEscolhido){
-    ndjMostrarAviso('Calcule e selecione uma opção de frete antes de continuar.', 'erro');
+    ndjMostrarAviso('Calcule e selecione uma opção de frete, ou marque para combinar a entrega/retirada pelo WhatsApp.', 'erro');
     return;
-  }
-  const metodo = document.getElementById('metodo-pagamento-escolhido').value;
-  if(!metodo){
-    ndjMostrarAviso('Selecione uma forma de pagamento.', 'erro');
-    return;
-  }
-  if(metodo === 'cartao'){
-    const numero = document.getElementById('campo-cartao-numero').value.trim();
-    const nome = document.getElementById('campo-cartao-nome').value.trim();
-    const validade = document.getElementById('campo-cartao-validade').value.trim();
-    const cvv = document.getElementById('campo-cartao-cvv').value.trim();
-    if(!numero || !nome || !validade || !cvv){
-      ndjMostrarAviso('Preencha todos os dados do cartão.', 'erro');
-      return;
-    }
   }
 
   const botao = document.getElementById('btn-confirmar-pedido');
   botao.disabled = true;
-  botao.textContent = 'Processando pagamento...';
+  botao.textContent = 'Preparando pagamento...';
 
   const dadosCliente = {
     nome: document.getElementById('campo-nome-cliente').value.trim(),
@@ -128,31 +140,48 @@ async function ndjFinalizarPedido(e){
     cep: document.getElementById('campo-cep-checkout').value.trim()
   };
 
-  // Simulação de processamento de pagamento (troque por integração real de gateway).
-  setTimeout(async () => {
+  try {
     const itens = ndjLerCarrinho();
     const subtotal = ndjSubtotalCarrinho();
     const cupom = window._ndjCupomCheckout;
     const desconto = cupom ? (cupom.tipo === 'percentual' ? +(subtotal*(cupom.valor/100)).toFixed(2) : Math.min(subtotal, cupom.valor)) : 0;
     const total = subtotal - desconto + ndjFreteEscolhido.preco;
 
-    try {
-      const pedido = await ndjCriarPedido({
-        cliente: dadosCliente,
-        itens,
-        metodoPagamento: metodo,
-        frete: ndjFreteEscolhido,
-        cupom: cupom ? cupom.codigo : null,
-        subtotal, desconto, total
-      });
+    // 1) cria o pedido no nosso banco, ainda como "pendente" (aguardando pagamento)
+    const pedido = await ndjCriarPedido({
+      cliente: dadosCliente,
+      itens,
+      metodoPagamento: 'mercadopago',
+      frete: ndjFreteEscolhido,
+      cupom: cupom ? cupom.codigo : null,
+      subtotal, desconto, total,
+      status: 'pendente'
+    });
 
-      ndjSalvarCarrinho([]);
-      sessionStorage.removeItem('ndj3d_cupom_checkout');
-      window.location.href = 'pedido.html?numero=' + pedido.numero;
-    } catch (err) {
-      ndjMostrarAviso('Não foi possível confirmar seu pedido. Tente novamente em instantes.', 'erro');
-      botao.disabled = false;
-      botao.textContent = 'Confirmar e pagar';
+    // 2) pede pro Mercado Pago (via Edge Function) criar a cobrança desse pedido
+    const { data, error } = await ndjSupabase.functions.invoke('criar-preferencia-mp', {
+      body: {
+        numero: pedido.numero,
+        itens,
+        frete: ndjFreteEscolhido,
+        cliente: dadosCliente,
+        urlBase: window.location.origin + window.location.pathname.replace(/checkout\.html$/, '')
+      }
+    });
+
+    if(error || !data || !data.initPoint){
+      throw new Error((data && data.erro) || 'Não foi possível iniciar o pagamento.');
     }
-  }, 1400);
+
+    ndjSalvarCarrinho([]);
+    sessionStorage.removeItem('ndj3d_cupom_checkout');
+
+    // 3) manda o cliente para a página de pagamento do Mercado Pago
+    window.location.href = data.initPoint;
+  } catch (err) {
+    console.error(err);
+    ndjMostrarAviso('Não foi possível iniciar o pagamento. Tente novamente em instantes.', 'erro');
+    botao.disabled = false;
+    botao.textContent = 'Ir para pagamento';
+  }
 }

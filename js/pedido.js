@@ -44,6 +44,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function ndjRenderizarConfirmacao(pedido){
+  const tituloEl = document.querySelector('#bloco-confirmacao-pedido h1');
+  const iconeEl = document.querySelector('#bloco-confirmacao-pedido .icone-check');
+  if(pedido.status === 'pendente'){
+    tituloEl.textContent = 'Aguardando confirmação do pagamento';
+    iconeEl.textContent = '⏳';
+    iconeEl.style.background = 'var(--bronze)';
+  } else if(pedido.status === 'pagamento_recusado'){
+    tituloEl.textContent = 'Pagamento não aprovado';
+    iconeEl.textContent = '✕';
+    iconeEl.style.background = 'var(--erro)';
+  } else {
+    tituloEl.textContent = 'Pedido confirmado!';
+    iconeEl.textContent = '✓';
+    iconeEl.style.background = 'var(--sucesso)';
+  }
   document.getElementById('numero-pedido-valor').textContent = pedido.numero;
   document.getElementById('codigo-rastreio-valor').textContent = pedido.rastreio;
   document.getElementById('email-confirmacao').textContent = pedido.cliente.email || '';
@@ -52,10 +67,19 @@ function ndjRenderizarConfirmacao(pedido){
 }
 
 function ndjMontarLinhaDoTempo(pedido){
-  const indiceAtual = pedido.etapas.findIndex(e => e.chave === pedido.status);
   const cabecalho = `
     <div class="numero-pedido">📦 Pedido ${pedido.numero} · Rastreio ${pedido.rastreio}</div>
   `;
+
+  if(pedido.status === 'pagamento_recusado'){
+    return cabecalho + `
+      <div class="linha-tempo">
+        <p style="color:var(--erro)">❌ O pagamento deste pedido não foi aprovado pelo Mercado Pago.</p>
+        <a href="checkout.html" class="btn btn-primario btn-pequeno">Tentar pagar novamente</a>
+      </div>`;
+  }
+
+  const indiceAtual = pedido.etapas.findIndex(e => e.chave === pedido.status);
   const linhas = pedido.etapas.map((etapa, i) => {
     let classe = '';
     if(i < indiceAtual) classe = 'concluido';

@@ -137,6 +137,7 @@ async function ndjMontarPaginaProduto(){
 
   // Frete
   document.getElementById('btn-calcular-frete').addEventListener('click', ndjExecutarCalculoFrete);
+  ndjMontarAvisoRetiradaLocal('aviso-retirada-local');
 
   // Adicionar ao carrinho
   document.getElementById('btn-adicionar-carrinho').addEventListener('click', ndjAdicionarProdutoAoCarrinho);

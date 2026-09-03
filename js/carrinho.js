@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if(!document.getElementById('lista-itens-carrinho')) return;
   await ndjCarregarDadosIniciais();
   ndjRenderizarCarrinho();
+  ndjMontarAvisoRetiradaLocal('aviso-retirada-local-carrinho');
   const formCupom = document.getElementById('form-cupom');
   if(formCupom){
     formCupom.addEventListener('submit', (e) => {

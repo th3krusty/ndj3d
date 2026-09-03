@@ -507,6 +507,12 @@ h1,h2,h3,h4{
 .calculo-frete input{ flex:1; padding:11px 12px; border:1px solid var(--linha); border-radius:3px; }
 .resultado-frete{ margin-top:12px; font-size:13.5px; }
 .resultado-frete .opcao-frete{ display:flex; justify-content:space-between; padding:8px 0; border-top:1px dashed var(--linha); }
+.aviso-retirada-local{
+  margin-top:12px; padding-top:12px; border-top:1px dashed var(--linha);
+  font-size:12.5px; color: var(--tinta-suave); line-height:1.5;
+}
+.aviso-retirada-local:empty{ display:none; }
+.aviso-retirada-local a{ color: var(--bronze-escuro); font-weight:600; text-decoration:underline; }
 
 .acoes-produto{ display:flex; gap:12px; }
 
@@ -555,18 +561,23 @@ h1,h2,h3,h4{
 .passos-checkout{ display:flex; gap:10px; margin-bottom:34px; }
 .passo{ flex:1; text-align:center; padding:10px; border-bottom:3px solid var(--linha); font-size:12.5px; font-weight:600; color: var(--tinta-suave); text-transform:uppercase; letter-spacing:0.03em;}
 .passo.ativo{ border-color: var(--bronze); color: var(--tinta); }
-.opcoes-pagamento{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:20px; }
-.opcao-pagamento{
-  border:1px solid var(--linha); border-radius: var(--raio); padding:16px; text-align:center; cursor:pointer;
+
+.linha-check{ display:flex; align-items:flex-start; gap:10px; cursor:pointer; }
+.linha-check input[type=checkbox]{ margin-top:3px; flex-shrink:0; }
+.caixa-combinar-local{
+  background: var(--creme-2); border:1px solid var(--bronze); border-top:1px solid var(--bronze);
+  border-radius: var(--raio); padding:14px 16px; margin-bottom:18px; font-size:13.5px;
 }
-.opcao-pagamento.selecionada{ border-color: var(--bronze); background: var(--creme-2); box-shadow: inset 0 0 0 1px var(--bronze); }
-.opcao-pagamento .icone{ font-size:24px; margin-bottom:6px; }
-.detalhes-pagamento{ display:none; margin-bottom:20px; }
-.detalhes-pagamento.ativa{ display:block; }
-.caixa-pix{ text-align:center; padding:24px; border:1px dashed var(--bronze); border-radius: var(--raio); }
-.qr-fake{ width:160px; height:160px; margin:0 auto 14px; background:
-  repeating-conic-gradient(var(--tinta) 0% 25%, #fff 0% 50%) 0 0/20px 20px;
-  border:6px solid #fff; box-shadow:0 0 0 1px var(--linha); }
+.caixa-combinar-local a{ color: var(--bronze-escuro); }
+
+.caixa-mercadopago{
+  display:flex; align-items:center; gap:14px;
+  border:1px solid var(--linha); border-radius: var(--raio); padding:16px; margin-bottom:8px;
+  background: var(--creme-2);
+}
+.logo-mercadopago{ width:44px; height:44px; flex-shrink:0; border-radius:50%; }
+.caixa-mercadopago strong{ display:block; margin-bottom:4px; font-size:14.5px; }
+.caixa-mercadopago p{ margin:0; font-size:13px; color: var(--tinta-suave); }
 
 /* ---------- Confirmação de pedido / rastreio ---------- */
 .caixa-confirmacao{ text-align:center; max-width:560px; margin:0 auto; padding:50px 20px; }

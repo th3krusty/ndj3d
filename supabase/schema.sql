@@ -56,8 +56,15 @@ create table if not exists public.pedidos (
   subtotal numeric(10,2) default 0,
   desconto numeric(10,2) default 0,
   total numeric(10,2) default 0,
-  avaliado boolean not null default false
+  avaliado boolean not null default false,
+  mp_preference_id text,
+  mp_payment_id text
 );
+
+-- Se a tabela já existia (site criado antes da integração com o Mercado
+-- Pago), estas duas linhas adicionam as colunas novas sem apagar nada.
+alter table public.pedidos add column if not exists mp_preference_id text;
+alter table public.pedidos add column if not exists mp_payment_id text;
 
 -- ---------- Avaliações ----------
 create table if not exists public.avaliacoes (

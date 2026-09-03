@@ -272,12 +272,14 @@ async function ndjCriarPedido(dados){
   const numero = 'NDJ' + (100000 + Math.floor(Math.random() * 899999));
   const rastreio = 'BR' + Math.floor(100000000 + Math.random() * 899999999) + 'X';
   const agora = new Date().toISOString();
+  const statusInicial = dados.status || 'pendente';
   const pedido = Object.assign({
     numero, rastreio,
-    status: 'pago',
+    status: statusInicial,
     dataCriacao: agora,
     etapas: [
-      { chave: 'pago', rotulo: 'Pagamento aprovado', data: agora },
+      { chave: 'pendente', rotulo: 'Aguardando pagamento', data: statusInicial === 'pendente' ? agora : null },
+      { chave: 'pago', rotulo: 'Pagamento aprovado', data: statusInicial === 'pago' ? agora : null },
       { chave: 'preparando', rotulo: 'Em produção / separação', data: null },
       { chave: 'enviado', rotulo: 'Pedido enviado', data: null },
       { chave: 'entregue', rotulo: 'Entregue', data: null }

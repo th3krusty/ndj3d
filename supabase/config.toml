@@ -1,0 +1,9 @@
+[functions.webhook-mp]
+# O Mercado Pago chama esta função direto (sem token de login do Supabase),
+# então ela precisa ficar acessível sem exigir autenticação.
+verify_jwt = false
+
+[functions.criar-preferencia-mp]
+# Esta é chamada pelo próprio site (que já manda a anon key automaticamente),
+# então pode manter a verificação padrão ligada.
+verify_jwt = true
