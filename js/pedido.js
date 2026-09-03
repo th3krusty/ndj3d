@@ -60,7 +60,14 @@ function ndjRenderizarConfirmacao(pedido){
     iconeEl.style.background = 'var(--sucesso)';
   }
   document.getElementById('numero-pedido-valor').textContent = pedido.numero;
-  document.getElementById('codigo-rastreio-valor').textContent = pedido.rastreio;
+  const separadorRastreioEl = document.getElementById('separador-rastreio');
+  const codigoRastreioEl = document.getElementById('codigo-rastreio-valor');
+  if(pedido.rastreio){
+    codigoRastreioEl.textContent = pedido.rastreio;
+    if(separadorRastreioEl) separadorRastreioEl.style.display = '';
+  } else if(separadorRastreioEl){
+    separadorRastreioEl.style.display = 'none';
+  }
   document.getElementById('email-confirmacao').textContent = pedido.cliente.email || '';
   document.getElementById('total-confirmacao').textContent = ndjFormatarMoeda(pedido.total);
   document.getElementById('linha-do-tempo-pedido').innerHTML = ndjMontarLinhaDoTempo(pedido);
@@ -68,7 +75,7 @@ function ndjRenderizarConfirmacao(pedido){
 
 function ndjMontarLinhaDoTempo(pedido){
   const cabecalho = `
-    <div class="numero-pedido">📦 Pedido ${pedido.numero} · Rastreio ${pedido.rastreio}</div>
+    <div class="numero-pedido">📦 Pedido ${pedido.numero}${pedido.rastreio ? ' · Rastreio ' + pedido.rastreio : ''}</div>
   `;
 
   if(pedido.status === 'pagamento_recusado'){

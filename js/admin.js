@@ -410,7 +410,13 @@ async function ndjRenderizarTabelaPedidos(){
   const corpo = document.getElementById('corpo-tabela-pedidos');
   corpo.innerHTML = pedidos.map(p => `
     <tr>
-      <td><strong>${p.numero}</strong><br><small>${p.rastreio}</small></td>
+      <td>
+        <strong>${p.numero}</strong><br>
+        <div class="edita-rastreio" style="display:flex; gap:4px; margin-top:4px">
+          <input type="text" class="campo-rastreio-admin" data-numero="${p.numero}" value="${p.rastreio || ''}" placeholder="Código de rastreio" style="font-size:12px; padding:4px 6px; width:120px">
+          <button type="button" class="btn-salvar-rastreio" data-numero="${p.numero}" style="font-size:12px; padding:4px 8px">Salvar</button>
+        </div>
+      </td>
       <td>${p.cliente.nome || '—'}<br><small>${p.cliente.email || ''}</small></td>
       <td>${new Date(p.dataCriacao).toLocaleDateString('pt-BR')}</td>
       <td>${ndjFormatarMoeda(p.total)}</td>
@@ -435,6 +441,20 @@ async function ndjRenderizarTabelaPedidos(){
         ndjMostrarAviso('Status do pedido atualizado.');
       } catch (err) {
         ndjMostrarAviso('Não foi possível atualizar o status.', 'erro');
+      }
+    });
+  });
+
+  corpo.querySelectorAll('.btn-salvar-rastreio').forEach(botao => {
+    botao.addEventListener('click', async () => {
+      const numero = botao.dataset.numero;
+      const campo = corpo.querySelector(`.campo-rastreio-admin[data-numero="${numero}"]`);
+      const rastreio = campo.value.trim();
+      try {
+        await ndjAtualizarRastreioPedido(numero, rastreio);
+        ndjMostrarAviso(rastreio ? 'Código de rastreio salvo. O cliente já pode ver.' : 'Rastreio removido.');
+      } catch (err) {
+        ndjMostrarAviso('Não foi possível salvar o rastreio.', 'erro');
       }
     });
   });
