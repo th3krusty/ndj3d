@@ -105,32 +105,50 @@ alter table public.pedidos enable row level security;
 alter table public.avaliacoes enable row level security;
 
 -- Categorias: leitura pública; escrita só para o admin autenticado
+drop policy if exists "categorias_select_publica" on public.categorias;
 create policy "categorias_select_publica" on public.categorias for select using (true);
+drop policy if exists "categorias_insert_admin" on public.categorias;
 create policy "categorias_insert_admin" on public.categorias for insert to authenticated with check (true);
+drop policy if exists "categorias_update_admin" on public.categorias;
 create policy "categorias_update_admin" on public.categorias for update to authenticated using (true);
+drop policy if exists "categorias_delete_admin" on public.categorias;
 create policy "categorias_delete_admin" on public.categorias for delete to authenticated using (true);
 
 -- Produtos: leitura pública; escrita só para o admin autenticado
+drop policy if exists "produtos_select_publica" on public.produtos;
 create policy "produtos_select_publica" on public.produtos for select using (true);
+drop policy if exists "produtos_insert_admin" on public.produtos;
 create policy "produtos_insert_admin" on public.produtos for insert to authenticated with check (true);
+drop policy if exists "produtos_update_admin" on public.produtos;
 create policy "produtos_update_admin" on public.produtos for update to authenticated using (true);
+drop policy if exists "produtos_delete_admin" on public.produtos;
 create policy "produtos_delete_admin" on public.produtos for delete to authenticated using (true);
 
 -- Cupons: leitura pública (para validar cupom no carrinho); escrita só para o admin autenticado
+drop policy if exists "cupons_select_publica" on public.cupons;
 create policy "cupons_select_publica" on public.cupons for select using (true);
+drop policy if exists "cupons_insert_admin" on public.cupons;
 create policy "cupons_insert_admin" on public.cupons for insert to authenticated with check (true);
+drop policy if exists "cupons_update_admin" on public.cupons;
 create policy "cupons_update_admin" on public.cupons for update to authenticated using (true);
+drop policy if exists "cupons_delete_admin" on public.cupons;
 create policy "cupons_delete_admin" on public.cupons for delete to authenticated using (true);
 
 -- Pedidos: qualquer visitante pode criar (finalizar compra) e consultar (rastrear
 -- pelo número) ou atualizar (admin muda status; cliente marca "avaliado").
+drop policy if exists "pedidos_select_publica" on public.pedidos;
 create policy "pedidos_select_publica" on public.pedidos for select using (true);
+drop policy if exists "pedidos_insert_publica" on public.pedidos;
 create policy "pedidos_insert_publica" on public.pedidos for insert with check (true);
+drop policy if exists "pedidos_update_publica" on public.pedidos;
 create policy "pedidos_update_publica" on public.pedidos for update using (true);
 
 -- Avaliações: qualquer visitante pode ler e criar; só o admin edita/apaga (não usado hoje)
+drop policy if exists "avaliacoes_select_publica" on public.avaliacoes;
 create policy "avaliacoes_select_publica" on public.avaliacoes for select using (true);
+drop policy if exists "avaliacoes_insert_publica" on public.avaliacoes;
 create policy "avaliacoes_insert_publica" on public.avaliacoes for insert with check (true);
+drop policy if exists "avaliacoes_delete_admin" on public.avaliacoes;
 create policy "avaliacoes_delete_admin" on public.avaliacoes for delete to authenticated using (true);
 
 -- ==========================================================================
@@ -143,12 +161,16 @@ insert into storage.buckets (id, name, public)
 values ('produtos-imagens', 'produtos-imagens', true)
 on conflict (id) do nothing;
 
+drop policy if exists "produtos_imagens_select_publica" on storage.objects;
 create policy "produtos_imagens_select_publica" on storage.objects
   for select using (bucket_id = 'produtos-imagens');
+drop policy if exists "produtos_imagens_insert_admin" on storage.objects;
 create policy "produtos_imagens_insert_admin" on storage.objects
   for insert to authenticated with check (bucket_id = 'produtos-imagens');
+drop policy if exists "produtos_imagens_update_admin" on storage.objects;
 create policy "produtos_imagens_update_admin" on storage.objects
   for update to authenticated using (bucket_id = 'produtos-imagens');
+drop policy if exists "produtos_imagens_delete_admin" on storage.objects;
 create policy "produtos_imagens_delete_admin" on storage.objects
   for delete to authenticated using (bucket_id = 'produtos-imagens');
 

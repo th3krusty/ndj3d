@@ -270,7 +270,9 @@ async function ndjListarPedidos(){
 }
 async function ndjCriarPedido(dados){
   const numero = 'NDJ' + (100000 + Math.floor(Math.random() * 899999));
-  const rastreio = 'BR' + Math.floor(100000000 + Math.random() * 899999999) + 'X';
+  // O código de rastreio começa vazio: só existe de verdade quando você
+  // posta o pacote e digita o código real no painel admin (aba Pedidos).
+  const rastreio = dados.rastreio || '';
   const agora = new Date().toISOString();
   const statusInicial = dados.status || 'pendente';
   const pedido = Object.assign({
@@ -309,6 +311,10 @@ async function ndjCriarPedido(dados){
 async function ndjAtualizarStatusPedido(numero, statusChave, etapas){
   const { error } = await ndjSupabase.from('pedidos').update({ status: statusChave, etapas }).eq('numero', numero);
   if(error){ console.error('Erro ao atualizar status do pedido:', error); throw error; }
+}
+async function ndjAtualizarRastreioPedido(numero, rastreio){
+  const { error } = await ndjSupabase.from('pedidos').update({ rastreio }).eq('numero', numero);
+  if(error){ console.error('Erro ao atualizar rastreio do pedido:', error); throw error; }
 }
 async function ndjMarcarPedidoAvaliado(numero){
   const { error } = await ndjSupabase.from('pedidos').update({ avaliado: true }).eq('numero', numero);
