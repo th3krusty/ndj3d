@@ -54,8 +54,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
   document.getElementById('btn-add-cor').addEventListener('click', ndjAdicionarCorEdicao);
+  document.getElementById('campo-nova-cor-foto').addEventListener('change', (e) => {
+    const arquivo = e.target.files[0];
+    document.getElementById('rotulo-nova-cor-foto').textContent = arquivo ? '✓ Foto escolhida' : '+ Foto da cor';
+  });
   document.getElementById('check-personalizacao-admin').addEventListener('change', (e) => {
     document.getElementById('campos-personalizacao-admin').style.display = e.target.checked ? 'grid' : 'none';
+  });
+  document.getElementById('check-pedido-minimo-admin').addEventListener('change', (e) => {
+    document.getElementById('campo-pedido-minimo-admin').style.display = e.target.checked ? 'block' : 'none';
   });
   document.getElementById('busca-admin-produtos').addEventListener('input', (e) => ndjRenderizarTabelaProdutos(e.target.value));
 
@@ -64,8 +71,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('fechar-modal-categoria').addEventListener('click', () => {
     document.getElementById('modal-categoria').classList.remove('aberta');
   });
-
-  document.getElementById('form-novo-cupom').addEventListener('submit', ndjCriarCupomAdmin);
 
   document.getElementById('form-alterar-senha').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -93,11 +98,9 @@ async function ndjMostrarPainel(){
   document.getElementById('tela-login').style.display = 'none';
   document.getElementById('shell-admin').style.display = 'grid';
   await ndjCarregarDadosIniciais();
-  await ndjAtualizarMetricasAdmin();
+  ndjAtualizarMetricasAdmin();
   ndjRenderizarTabelaProdutos();
   ndjRenderizarTabelaCategorias();
-  ndjRenderizarTabelaCupons();
-  await ndjRenderizarTabelaPedidos();
 }
 
 function ndjTrocarSecaoAdmin(secao){
@@ -105,14 +108,12 @@ function ndjTrocarSecaoAdmin(secao){
   document.querySelectorAll('.painel-admin-secao').forEach(p => p.classList.toggle('ativo', p.id === 'secao-' + secao));
 }
 
-async function ndjAtualizarMetricasAdmin(){
+function ndjAtualizarMetricasAdmin(){
   const produtos = ndjListarProdutos();
-  const pedidos = await ndjListarPedidos();
-  const faturamento = pedidos.reduce((s,p) => s + p.total, 0);
   document.getElementById('metrica-produtos').textContent = produtos.length;
-  document.getElementById('metrica-pedidos').textContent = pedidos.length;
-  document.getElementById('metrica-faturamento').textContent = ndjFormatarMoeda(faturamento);
-  document.getElementById('metrica-cupons').textContent = ndjListarCupons().filter(c => c.ativo).length;
+  document.getElementById('metrica-categorias').textContent = ndjListarCategorias().length;
+  document.getElementById('metrica-shopee').textContent = produtos.filter(p => p.shopeeUrl).length;
+  document.getElementById('metrica-tiktok').textContent = produtos.filter(p => p.tiktokUrl).length;
 }
 
 /* ---------------- Produtos ---------------- */
@@ -132,12 +133,13 @@ function ndjRenderizarTabelaProdutos(termo){
       <td>${ndjFormatarMoeda(p.preco)}</td>
       <td>${p.estoque}</td>
       <td>${p.personalizacao.disponivel ? 'Sim (+' + ndjFormatarMoeda(p.personalizacao.precoExtra) + ')' : 'Não'}</td>
+      <td>${p.pedidoMinimo && p.pedidoMinimo.ativo ? p.pedidoMinimo.quantidade + ' un.' : '—'}</td>
       <td class="acoes-tabela">
         <button class="btn btn-contorno btn-pequeno" data-acao="editar" data-id="${p.id}">Editar</button>
         <button class="btn btn-perigo btn-pequeno" data-acao="excluir" data-id="${p.id}">Excluir</button>
       </td>
     </tr>`;
-  }).join('') || '<tr><td colspan="7">Nenhum produto cadastrado.</td></tr>';
+  }).join('') || '<tr><td colspan="8">Nenhum produto cadastrado.</td></tr>';
 
   corpo.querySelectorAll('[data-acao=editar]').forEach(b => b.addEventListener('click', () => ndjAbrirModalProduto(b.dataset.id)));
   corpo.querySelectorAll('[data-acao=excluir]').forEach(b => b.addEventListener('click', async () => {
@@ -165,8 +167,8 @@ function ndjAbrirModalProduto(id){
   selectCategoria.value = produto ? produto.categoria : (categorias[0] ? categorias[0].id : '');
   document.getElementById('campo-produto-preco').value = produto ? produto.preco : '';
   document.getElementById('campo-produto-estoque').value = produto ? produto.estoque : 10;
-  document.getElementById('campo-produto-peso').value = produto ? produto.pesoKg : 0.1;
-  document.getElementById('campo-produto-shopee').value = produto ? produto.shopeeUrl : 'https://shopee.com.br/';
+  document.getElementById('campo-produto-shopee').value = produto ? (produto.shopeeUrl || '') : '';
+  document.getElementById('campo-produto-tiktok').value = produto ? (produto.tiktokUrl || '') : '';
   document.getElementById('campo-produto-descricao').value = produto ? produto.descricao : '';
   document.getElementById('campo-produto-caracteristicas').value = produto ? produto.caracteristicas.join('\n') : '';
 
@@ -183,6 +185,12 @@ function ndjAbrirModalProduto(id){
   document.getElementById('campo-personalizacao-preco').value = produto ? produto.personalizacao.precoExtra : 5;
   document.getElementById('campo-personalizacao-rotulo').value = produto ? produto.personalizacao.rotulo : 'Nome personalizado';
   document.getElementById('campo-personalizacao-max').value = produto ? produto.personalizacao.maxCaracteres : 15;
+
+  const pedidoMinimo = produto && produto.pedidoMinimo ? produto.pedidoMinimo : { ativo: false, quantidade: 1 };
+  const checkPedidoMinimo = document.getElementById('check-pedido-minimo-admin');
+  checkPedidoMinimo.checked = pedidoMinimo.ativo;
+  document.getElementById('campo-pedido-minimo-admin').style.display = pedidoMinimo.ativo ? 'block' : 'none';
+  document.getElementById('campo-pedido-minimo-qtd').value = pedidoMinimo.quantidade || 1;
 
   document.getElementById('modal-produto').classList.add('aberta');
 }
@@ -243,11 +251,17 @@ function ndjLimparPreviewsImagens(){
 
 function ndjRenderizarCoresEdicao(){
   const alvo = document.getElementById('lista-cores-admin');
-  alvo.innerHTML = ndjCoresEmEdicao.map((c, i) => `
-    <span class="tag-cor-admin"><span style="width:10px;height:10px;border-radius:50%;background:${c.hex};display:inline-block;"></span>${c.nome} <button type="button" data-i="${i}">&times;</button></span>
-  `).join('') || '<span style="font-size:12px;color:var(--tinta-suave)">Nenhuma cor adicionada.</span>';
+  alvo.innerHTML = ndjCoresEmEdicao.map((c, i) => {
+    const fotoUrl = c.previewFoto || c.foto;
+    const miniatura = fotoUrl
+      ? `<img src="${fotoUrl}" alt="" style="width:18px;height:18px;border-radius:50%;object-fit:cover;display:inline-block;">`
+      : `<span style="width:10px;height:10px;border-radius:50%;background:${c.hex};display:inline-block;"></span>`;
+    return `<span class="tag-cor-admin">${miniatura}${c.nome} <button type="button" data-i="${i}">&times;</button></span>`;
+  }).join('') || '<span style="font-size:12px;color:var(--tinta-suave)">Nenhuma cor adicionada.</span>';
 
   alvo.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    const cor = ndjCoresEmEdicao[parseInt(b.dataset.i)];
+    if(cor && cor.previewFoto) URL.revokeObjectURL(cor.previewFoto);
     ndjCoresEmEdicao.splice(parseInt(b.dataset.i), 1);
     ndjRenderizarCoresEdicao();
   }));
@@ -256,9 +270,28 @@ function ndjRenderizarCoresEdicao(){
 function ndjAdicionarCorEdicao(){
   const nome = document.getElementById('campo-nova-cor-nome').value.trim();
   const hex = document.getElementById('campo-nova-cor-hex').value;
+  const campoFoto = document.getElementById('campo-nova-cor-foto');
+  const arquivoFoto = campoFoto.files[0];
   if(!nome) return;
-  ndjCoresEmEdicao.push({ nome, hex });
+
+  const cor = { nome, hex, foto: '' };
+  if(arquivoFoto){
+    if(!arquivoFoto.type.startsWith('image/')){
+      ndjMostrarAviso('Escolha um arquivo de imagem (jpg, png, webp...) para a foto da cor.', 'erro');
+      return;
+    }
+    if(arquivoFoto.size > 5 * 1024 * 1024){
+      ndjMostrarAviso('Essa foto da cor passa de 5MB. Escolha uma imagem menor.', 'erro');
+      return;
+    }
+    cor.arquivoFoto = arquivoFoto;
+    cor.previewFoto = URL.createObjectURL(arquivoFoto);
+  }
+
+  ndjCoresEmEdicao.push(cor);
   document.getElementById('campo-nova-cor-nome').value = '';
+  campoFoto.value = '';
+  document.getElementById('rotulo-nova-cor-foto').textContent = '+ Foto da cor';
   ndjRenderizarCoresEdicao();
 }
 
@@ -290,13 +323,24 @@ async function ndjSalvarProdutoAdmin(e){
     return;
   }
 
+  let cores;
+  try {
+    cores = await ndjEnviarFotosCoresProduto(id);
+  } catch (err) {
+    ndjMostrarAviso('Não foi possível enviar a foto de uma das cores: ' + err.message, 'erro');
+    if(botao) botao.disabled = false;
+    return;
+  }
+
+  const pedidoMinimoAtivo = document.getElementById('check-pedido-minimo-admin').checked;
+
   const produto = {
     id,
     nome: document.getElementById('campo-produto-nome').value.trim(),
     categoria: document.getElementById('campo-produto-categoria').value,
     preco: parseFloat(document.getElementById('campo-produto-preco').value) || 0,
     imagens,
-    cores: ndjCoresEmEdicao,
+    cores,
     personalizacao: {
       disponivel: personalizacaoAtiva,
       precoExtra: parseFloat(document.getElementById('campo-personalizacao-preco').value) || 0,
@@ -305,16 +349,20 @@ async function ndjSalvarProdutoAdmin(e){
     },
     descricao: document.getElementById('campo-produto-descricao').value.trim(),
     caracteristicas: document.getElementById('campo-produto-caracteristicas').value.split('\n').map(s=>s.trim()).filter(Boolean),
-    pesoKg: parseFloat(document.getElementById('campo-produto-peso').value) || 0.1,
     estoque: parseInt(document.getElementById('campo-produto-estoque').value) || 0,
-    shopeeUrl: document.getElementById('campo-produto-shopee').value.trim() || 'https://shopee.com.br/'
+    shopeeUrl: document.getElementById('campo-produto-shopee').value.trim(),
+    tiktokUrl: document.getElementById('campo-produto-tiktok').value.trim(),
+    pedidoMinimo: {
+      ativo: pedidoMinimoAtivo,
+      quantidade: pedidoMinimoAtivo ? Math.max(1, parseInt(document.getElementById('campo-pedido-minimo-qtd').value) || 1) : 1
+    }
   };
 
   try {
     await ndjSalvarProduto(produto);
     ndjFecharModalProduto();
     ndjRenderizarTabelaProdutos();
-    await ndjAtualizarMetricasAdmin();
+    ndjAtualizarMetricasAdmin();
     ndjMostrarAviso('Produto salvo com sucesso!');
   } catch (err) {
     ndjMostrarAviso('Não foi possível salvar o produto.', 'erro');
@@ -340,124 +388,22 @@ async function ndjEnviarImagensProduto(produtoId){
   return urls;
 }
 
-/* ---------------- Cupons ---------------- */
-function ndjRenderizarTabelaCupons(){
-  const cupons = ndjListarCupons();
-  const corpo = document.getElementById('corpo-tabela-cupons');
-  corpo.innerHTML = cupons.map((c) => `
-    <tr>
-      <td><strong>${c.codigo}</strong></td>
-      <td>${c.tipo === 'percentual' ? 'Percentual' : 'Valor fixo'}</td>
-      <td>${c.tipo === 'percentual' ? c.valor + '%' : ndjFormatarMoeda(c.valor)}</td>
-      <td><span class="pill-status ${c.ativo ? 'ativo' : 'inativo'}">${c.ativo ? 'Ativo' : 'Inativo'}</span></td>
-      <td class="acoes-tabela">
-        <button class="btn btn-contorno btn-pequeno" data-acao="alternar" data-id="${c.id}">${c.ativo ? 'Desativar' : 'Ativar'}</button>
-        <button class="btn btn-perigo btn-pequeno" data-acao="excluir" data-id="${c.id}">Excluir</button>
-      </td>
-    </tr>
-  `).join('') || '<tr><td colspan="5">Nenhum cupom cadastrado.</td></tr>';
-
-  corpo.querySelectorAll('[data-acao=alternar]').forEach(b => b.addEventListener('click', async () => {
-    const cupom = ndjListarCupons().find(c => String(c.id) === b.dataset.id);
-    if(!cupom) return;
-    try {
-      await ndjAtualizarCupom(Object.assign({}, cupom, { ativo: !cupom.ativo }));
-      ndjRenderizarTabelaCupons();
-      await ndjAtualizarMetricasAdmin();
-    } catch (err) {
-      ndjMostrarAviso('Não foi possível atualizar o cupom.', 'erro');
+/* Percorre as cores em edição: cores com foto nova (arquivoFoto) fazem
+   upload pro Supabase Storage; cores com foto já salva ou sem foto passam
+   direto. Devolve o array de cores pronto para salvar (sem os campos
+   auxiliares arquivoFoto/previewFoto usados só no painel). */
+async function ndjEnviarFotosCoresProduto(produtoId){
+  const cores = [];
+  for(let i=0; i<ndjCoresEmEdicao.length; i++){
+    const c = ndjCoresEmEdicao[i];
+    let foto = c.foto || '';
+    if(c.arquivoFoto){
+      foto = await ndjEnviarFotoCor(produtoId, i, c.arquivoFoto);
+      if(c.previewFoto) URL.revokeObjectURL(c.previewFoto);
     }
-  }));
-  corpo.querySelectorAll('[data-acao=excluir]').forEach(b => b.addEventListener('click', async () => {
-    if(!confirm('Tem certeza que deseja excluir este cupom?')) return;
-    try {
-      await ndjExcluirCupom(b.dataset.id);
-      ndjRenderizarTabelaCupons();
-      await ndjAtualizarMetricasAdmin();
-    } catch (err) {
-      ndjMostrarAviso('Não foi possível excluir o cupom.', 'erro');
-    }
-  }));
-}
-
-async function ndjCriarCupomAdmin(e){
-  e.preventDefault();
-  const codigo = document.getElementById('campo-cupom-codigo').value.trim().toUpperCase();
-  if(!codigo) return;
-  if(ndjListarCupons().some(c => c.codigo === codigo)){
-    ndjMostrarAviso('Já existe um cupom com esse código.', 'erro');
-    return;
+    cores.push({ nome: c.nome, hex: c.hex, foto });
   }
-  try {
-    await ndjCriarCupom({
-      codigo,
-      tipo: document.getElementById('campo-cupom-tipo').value,
-      valor: parseFloat(document.getElementById('campo-cupom-valor').value) || 0,
-      validade: document.getElementById('campo-cupom-validade').value || ''
-    });
-    e.target.reset();
-    ndjRenderizarTabelaCupons();
-    await ndjAtualizarMetricasAdmin();
-    ndjMostrarAviso('Cupom criado!');
-  } catch (err) {
-    ndjMostrarAviso('Não foi possível criar o cupom.', 'erro');
-  }
-}
-
-/* ---------------- Pedidos ---------------- */
-async function ndjRenderizarTabelaPedidos(){
-  const pedidos = await ndjListarPedidos();
-  const corpo = document.getElementById('corpo-tabela-pedidos');
-  corpo.innerHTML = pedidos.map(p => `
-    <tr>
-      <td>
-        <strong>${p.numero}</strong><br>
-        <div class="edita-rastreio" style="display:flex; gap:4px; margin-top:4px">
-          <input type="text" class="campo-rastreio-admin" data-numero="${p.numero}" value="${p.rastreio || ''}" placeholder="Código de rastreio" style="font-size:12px; padding:4px 6px; width:120px">
-          <button type="button" class="btn-salvar-rastreio" data-numero="${p.numero}" style="font-size:12px; padding:4px 8px">Salvar</button>
-        </div>
-      </td>
-      <td>${p.cliente.nome || '—'}<br><small>${p.cliente.email || ''}</small></td>
-      <td>${new Date(p.dataCriacao).toLocaleDateString('pt-BR')}</td>
-      <td>${ndjFormatarMoeda(p.total)}</td>
-      <td>
-        <select data-numero="${p.numero}" class="select-status-pedido">
-          ${p.etapas.map(et => `<option value="${et.chave}" ${et.chave===p.status?'selected':''}>${et.rotulo}</option>`).join('')}
-        </select>
-      </td>
-    </tr>
-  `).join('') || '<tr><td colspan="5">Nenhum pedido ainda.</td></tr>';
-
-  corpo.querySelectorAll('.select-status-pedido').forEach(sel => {
-    sel.addEventListener('change', async () => {
-      const pedidos = await ndjListarPedidos();
-      const pedido = pedidos.find(p => p.numero === sel.dataset.numero);
-      if(!pedido) return;
-      pedido.status = sel.value;
-      const etapa = pedido.etapas.find(e => e.chave === sel.value);
-      if(etapa && !etapa.data) etapa.data = new Date().toISOString();
-      try {
-        await ndjAtualizarStatusPedido(pedido.numero, pedido.status, pedido.etapas);
-        ndjMostrarAviso('Status do pedido atualizado.');
-      } catch (err) {
-        ndjMostrarAviso('Não foi possível atualizar o status.', 'erro');
-      }
-    });
-  });
-
-  corpo.querySelectorAll('.btn-salvar-rastreio').forEach(botao => {
-    botao.addEventListener('click', async () => {
-      const numero = botao.dataset.numero;
-      const campo = corpo.querySelector(`.campo-rastreio-admin[data-numero="${numero}"]`);
-      const rastreio = campo.value.trim();
-      try {
-        await ndjAtualizarRastreioPedido(numero, rastreio);
-        ndjMostrarAviso(rastreio ? 'Código de rastreio salvo. O cliente já pode ver.' : 'Rastreio removido.');
-      } catch (err) {
-        ndjMostrarAviso('Não foi possível salvar o rastreio.', 'erro');
-      }
-    });
-  });
+  return cores;
 }
 
 /* ---------------- Categorias ---------------- */

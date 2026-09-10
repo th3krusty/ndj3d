@@ -9,10 +9,10 @@
    Assim, qualquer alteração feita aqui (ou em config.js) aparece
    automaticamente em todas as páginas — sem precisar editar uma por uma.
    Controle por página via atributos no <body>:
-     data-pagina="index|produtos|produto|carrinho|checkout|pedido|contato"
-     data-nav="0"          → esconde o menu de navegação (ex: checkout)
-     data-flutuantes="0"   → esconde os botões flutuantes (ex: checkout)
-     data-rodape="minimo"  → mostra só a linha de copyright (ex: checkout)
+     data-pagina="index|produtos|produto|contato"
+     data-nav="0"          → esconde o menu de navegação
+     data-flutuantes="0"   → esconde os botões flutuantes
+     data-rodape="minimo"  → mostra só a linha de copyright
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', ndjMontarLayout);
@@ -28,7 +28,6 @@ function ndjMontarLayout(){
   ndjInjetarCabecalho(pagina, comNav);
   ndjInjetarRodape(rodapeCompleto);
   if(comFlutuantes) ndjInjetarFlutuantes();
-  if(typeof ndjAtualizarBadgeCarrinho === 'function') ndjAtualizarBadgeCarrinho();
 }
 
 function ndjInjetarTopoAviso(){
@@ -44,7 +43,6 @@ function ndjInjetarCabecalho(paginaAtiva, comNav){
   const linksNav = [
     { href: 'index.html', label: 'Início', chave: 'index' },
     { href: 'produtos.html', label: 'Produtos', chave: 'produtos' },
-    { href: 'pedido.html', label: 'Rastrear pedido', chave: 'pedido' },
     { href: 'contato.html', label: 'Contato', chave: 'contato' }
   ];
 
@@ -66,9 +64,6 @@ function ndjInjetarCabecalho(paginaAtiva, comNav){
       </a>
       ${nav}
       <div class="acoes-cabecalho">
-        <a href="carrinho.html" class="icone-btn" title="Carrinho">
-          🛒<span class="badge-carrinho">0</span>
-        </a>
         ${comNav ? '<button class="btn-menu-mobile" aria-label="Abrir menu">☰</button>' : ''}
       </div>
     </div>`;
@@ -116,12 +111,10 @@ function ndjInjetarRodape(completo){
             <div class="txt"><strong>${NDJ_CONFIG.nomeLoja}</strong><span>${NDJ_CONFIG.slogan}</span></div>
           </a>
           <p class="sobre">Peças impressas em 3D com cuidado artesanal, feitas para presentear, decorar e organizar o seu dia a dia.</p>
-          <div class="selos-pagamento">
-            <span class="selo">Pix</span><span class="selo">Cartão</span><span class="selo">Boleto</span>
-          </div>
+          
         </div>
         <div>
-          <h4>Loja</h4>
+          <h4>Catálogo</h4>
           <ul>
             <li><a href="produtos.html">Todos os produtos</a></li>
             <li><a href="produtos.html?categoria=presentes">Presentes</a></li>
@@ -131,12 +124,14 @@ function ndjInjetarRodape(completo){
           </ul>
         </div>
         <div>
-          <h4>Atendimento</h4>
+          <h4>Onde comprar</h4>
           <ul>
-            <li><a href="pedido.html">Rastrear pedido</a></li>
-            <li><a href="carrinho.html">Meu carrinho</a></li>
+            <li><a href="${NDJ_CONFIG.shopeeShopUrl}" target="_blank" rel="noopener">Loja Oficial na Shopee</a></li>
+            ${NDJ_CONFIG.tiktokShopUrl
+              ? `<li><a href="${NDJ_CONFIG.tiktokShopUrl}" target="_blank" rel="noopener">Loja Oficial no TikTok Shop</a></li>`
+              : '<li>Loja no TikTok Shop <em>(em breve)</em></li>'}
+            <li><a href="https://wa.me/${NDJ_CONFIG.whatsappNumero}" target="_blank" rel="noopener">Comprar pelo WhatsApp</a></li>
             <li><a href="contato.html">Fale conosco</a></li>
-             <li><a href="https://shopee.com.br/ndj3d" target="_blank" rel="noopener">Loja Oficial na Shopee</a></li>
            <li><a href="linker.html" target="_blank" rel="noopener">Linker</a></li>
              <li><a href="admin.html">Área do administrador</a></li>
           </ul>

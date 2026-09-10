@@ -22,19 +22,22 @@
       </div>
 
       <div class="info-produto">
-        <span class="eyebrow">NDJ 3D <a id="link-shopee-produto" href="#" target="_blank" rel="noopener" class="link-shopee-produto">Ver na<img src="assets/icones/shopee.png" alt="Shopee"></a></span>
+        <span class="eyebrow">NDJ 3D</span>
         <h1 id="nome-produto">Carregando...</h1>
-        <div class="avaliacao" id="avaliacao-produto"></div>
 
         <span class="a-partir" id="rotulo-a-partir" style="display:none">a partir de</span>
         <div class="preco-produto" id="preco-produto-valor">R$ 0,00</div>
         <div class="parcelas"><span id="estoque-produto" style="color:var(--sucesso)"></span></div>
 
         <div class="bloco-opcao" id="bloco-cores"></div>
+        <div class="foto-cor-real" id="foto-cor-real" style="display:none">
+          <img id="img-cor-real" alt="">
+          <small>Foto real desta cor</small>
+        </div>
         <div class="bloco-opcao" id="bloco-personalizar"></div>
 
         <div class="bloco-opcao">
-          <label class="titulo-opcao">Quantidade</label>
+          <label class="titulo-opcao">Quantidade desejada</label>
           <div class="quantidade-linha">
             <div class="seletor-qtd">
               <button type="button" id="btn-qtd-menos">−</button>
@@ -42,24 +45,21 @@
               <button type="button" id="btn-qtd-mais">+</button>
             </div>
           </div>
+          <small id="aviso-pedido-minimo" style="display:none; color:var(--tinta-suave);"></small>
         </div>
 
         <div class="resumo-preco-final" id="resumo-preco-final"></div>
 
+        <div class="bloco-marketplaces" id="bloco-marketplaces">
+          <label class="titulo-opcao">Comprar no marketplace</label>
+          <div class="links-marketplace" id="links-marketplace"></div>
+        </div>
+<p>   </p>
         <div class="acoes-produto">
-          <button class="btn btn-primario" id="btn-adicionar-carrinho" style="flex:1">Adicionar ao carrinho</button>
-          <button class="btn btn-bronze" id="btn-comprar-agora" style="flex:1">Comprar agora</button>
+          <a class="btn btn-bronze" id="btn-comprar-whatsapp" href="#" target="_blank" rel="noopener" style="flex:1">Comprar pelo WhatsApp</a>
         </div>
 
-        <div class="calculo-frete" style="margin-top:26px">
-          <label class="titulo-opcao" style="margin:0">Calcular frete e prazo</label>
-          <div class="linha-cep">
-            <input type="text" id="campo-cep" placeholder="Digite seu CEP" maxlength="9">
-            <button class="btn btn-contorno btn-pequeno" id="btn-calcular-frete">Calcular</button>
-          </div>
-          <div class="resultado-frete" id="resultado-frete"></div>
-          <div class="aviso-retirada-local" id="aviso-retirada-local"></div>
-        </div>
+        <div class="aviso-retirada-local" id="aviso-retirada-local" style="margin-top:18px"></div>
       </div>
     </div>
 
@@ -68,12 +68,10 @@
         <button class="ativa" data-painel="painel-descricao">Descrição</button>
         <button data-painel="painel-caracteristicas">Características</button>
         <button data-painel="painel-entrega">Entrega</button>
-        <button data-painel="painel-avaliacoes" id="btn-aba-avaliacoes">Avaliações</button>
       </div>
       <div class="painel-aba ativa" id="painel-descricao"></div>
       <div class="painel-aba" id="painel-caracteristicas"></div>
       <div class="painel-aba" id="painel-entrega"></div>
-      <div class="painel-aba" id="painel-avaliacoes"></div>
     </div>
 
     <div class="secao" id="secao-relacionados">

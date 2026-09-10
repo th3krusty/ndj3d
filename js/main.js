@@ -4,7 +4,6 @@
 
 document.addEventListener('DOMContentLoaded', async () => {
   await ndjCarregarDadosIniciais();
-  ndjAtualizarBadgeCarrinho();
   ndjRenderizarCategoriasHome();
   ndjRenderizarDestaques();
   ndjRenderizarGradeProdutos();
@@ -16,8 +15,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 function ndjMontarAvisoRetiradaLocal(idAlvo){
   const alvo = document.getElementById(idAlvo);
   if(!alvo) return;
-  alvo.innerHTML = `📍 É de <strong>${NDJ_CONFIG.regiaoLocal}</strong>? A entrega ou retirada também pode ser combinada direto pelo
-    <a href="https://wa.me/${NDJ_CONFIG.whatsappNumero}" target="_blank" rel="noopener">WhatsApp</a>, sem pagar frete calculado.`;
+  alvo.innerHTML = `É de <strong>${NDJ_CONFIG.regiaoLocal}</strong>? A entrega ou retirada também pode ser combinada direto pelo
+    <a href="https://wa.me/${NDJ_CONFIG.whatsappNumero}" target="_blank" rel="noopener">WhatsApp</a>.`;
 }
 
 function ndjMostrarAviso(mensagem, tipo){
