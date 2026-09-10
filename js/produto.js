@@ -1,5 +1,8 @@
 /* ==========================================================================
-   NDJ 3D — Lógica da página de detalhe do produto
+   NDJ 3D — Lógica da página de detalhe do produto (catálogo)
+   Site 100% catálogo: sem preço, sem estoque e sem escolha de quantidade
+   no site. O visitante vê o produto e compra pela Shopee, pelo TikTok Shop
+   ou combina direto pelo WhatsApp.
    ========================================================================== */
 
 let ndjProdutoAtual = null;
@@ -41,17 +44,10 @@ async function ndjMontarPaginaProduto(){
   });
 
   document.getElementById('nome-produto').textContent = p.nome;
-  const resumoAval = await ndjResumoAvaliacoes(p.id);
-  document.getElementById('avaliacao-produto').innerHTML = resumoAval.total
-    ? '★'.repeat(Math.round(resumoAval.media)) + '☆'.repeat(5 - Math.round(resumoAval.media)) +
-      ` (${resumoAval.media.toFixed(1)} · ${resumoAval.total} avaliaç${resumoAval.total === 1 ? 'ão' : 'ões'})`
-    : '<span class="sem-avaliacao">Ainda sem avaliações · seja o primeiro a comprar e avaliar</span>';
-  document.getElementById('btn-aba-avaliacoes').textContent = `Avaliações (${resumoAval.total})`;
 
-  document.getElementById('estoque-produto').textContent = p.estoque > 10
-    ? 'Em estoque' : (p.estoque > 0 ? `Últimas ${p.estoque} unidades` : 'Sob encomenda');
-
-  // Cores
+  // Cores — ao escolher uma cor, a foto principal passa a mostrar a foto
+  // real daquela cor (quando cadastrada). Sem foto de cor, a foto principal
+  // volta para a primeira foto do produto.
   const blocoCores = document.getElementById('bloco-cores');
   if(p.cores.length){
     blocoCores.innerHTML = `<label class="titulo-opcao">Cor: <span id="nome-cor-selecionada">${p.cores[0].nome}</span></label>
@@ -64,11 +60,13 @@ async function ndjMontarPaginaProduto(){
         btn.classList.add('selecionada');
         ndjCorSelecionada = btn.dataset.nome;
         document.getElementById('nome-cor-selecionada').textContent = ndjCorSelecionada;
+        ndjAtualizarFotoPrincipalPelaCor(p.cores[parseInt(btn.dataset.i)]);
+        ndjAtualizarBotaoWhatsapp();
       });
     });
+    ndjAtualizarFotoPrincipalPelaCor(p.cores[0]);
   } else {
     blocoCores.innerHTML = '';
-    ndjMostrarFotoCorReal(null);
   }
 
   // Personalização (sem valor: o preço da personalização é combinado direto
@@ -82,7 +80,7 @@ async function ndjMontarPaginaProduto(){
           <label for="check-personalizar"><strong>Quero personalizar</strong></label>
         </div>
         <input type="text" id="texto-personalizar" placeholder="${p.personalizacao.rotulo}" maxlength="${p.personalizacao.maxCaracteres}" disabled>
-        <small>${p.personalizacao.rotulo} · máx. ${p.personalizacao.maxCaracteres} caracteres</small>
+        <small>${p.personalizacao.rotulo} · máx. ${p.personalizacao.maxCaracteres} caracteres · informe esse texto ao combinar a compra</small>
       </div>`;
     const check = document.getElementById('check-personalizar');
     const texto = document.getElementById('texto-personalizar');
@@ -96,24 +94,18 @@ async function ndjMontarPaginaProduto(){
     blocoPersonalizar.innerHTML = '';
   }
 
-  // Quantidade
-  document.getElementById('qtd-input').value = 1;
-  document.getElementById('btn-qtd-menos').addEventListener('click', () => {
-    ndjQtdSelecionada = Math.max(1, ndjQtdSelecionada - 1);
-    document.getElementById('qtd-input').value = ndjQtdSelecionada;
-    ndjAtualizarResumoPreco();
-  });
-  document.getElementById('btn-qtd-mais').addEventListener('click', () => {
-    ndjQtdSelecionada = Math.min(p.estoque || 99, ndjQtdSelecionada + 1);
-    document.getElementById('qtd-input').value = ndjQtdSelecionada;
-    ndjAtualizarResumoPreco();
-  });
-  document.getElementById('qtd-input').addEventListener('change', (e) => {
-    ndjQtdSelecionada = Math.max(1, parseInt(e.target.value) || 1);
-    ndjAtualizarResumoPreco();
-  });
+  // Pedido mínimo — informativo (o cadastro continua no admin; o site não
+  // tem mais seletor de quantidade, então isso só avisa o visitante).
+  const avisoPedidoMinimo = document.getElementById('aviso-pedido-minimo');
+  if(p.pedidoMinimo && p.pedidoMinimo.ativo && p.pedidoMinimo.quantidade > 1){
+    avisoPedidoMinimo.textContent = `Pedido mínimo: ${p.pedidoMinimo.quantidade} unidades`;
+    avisoPedidoMinimo.style.display = 'block';
+  } else {
+    avisoPedidoMinimo.style.display = 'none';
+  }
 
-  ndjAtualizarResumoPreco();
+  // Aviso de desconto especial comprando direto pelo WhatsApp
+  ndjMontarAvisoDescontoWhatsapp('aviso-desconto-whatsapp');
 
   // Descrição / características / avaliações (abas)
   document.getElementById('painel-descricao').innerHTML = `<p>${p.descricao}</p>`;
@@ -140,6 +132,47 @@ async function ndjMontarPaginaProduto(){
   }
 }
 
+/* Troca a foto principal pela foto real da cor escolhida (quando existir).
+   Sem foto cadastrada para a cor, volta pra primeira foto do produto. */
+function ndjAtualizarFotoPrincipalPelaCor(cor){
+  const p = ndjProdutoAtual;
+  const imgPrincipal = document.getElementById('galeria-principal-img');
+  if(cor && cor.foto){
+    imgPrincipal.src = cor.foto;
+    imgPrincipal.alt = p.nome + ' na cor ' + cor.nome;
+  } else {
+    imgPrincipal.src = p.imagens[0];
+    imgPrincipal.alt = p.nome;
+  }
+  document.querySelectorAll('#galeria-miniaturas img').forEach(i => i.classList.remove('ativa'));
+}
+
+function ndjMontarLinksMarketplace(p){
+  const alvo = document.getElementById('links-marketplace');
+  const botoes = [];
+
+  if(p.shopeeUrl){
+    botoes.push(`<a href="${p.shopeeUrl}" target="_blank" rel="noopener" class="btn-marketplace btn-marketplace-shopee">
+      <img src="assets/icones/shopee.png" alt="Shopee"> Comprar na Shopee
+    </a>`);
+  }
+
+  if(p.tiktokUrl){
+    botoes.push(`<a href="${p.tiktokUrl}" target="_blank" rel="noopener" class="btn-marketplace btn-marketplace-tiktok">
+      <img src="assets/icones/tiktok.svg" alt="TikTok Shop"> Comprar no TikTok Shop
+    </a>`);
+  } else {
+    botoes.push(`<span class="btn-marketplace btn-marketplace-tiktok desabilitado" title="Em breve">
+      <img src="assets/icones/tiktok.svg" alt="TikTok Shop"> TikTok Shop (em breve)
+    </span>`);
+  }
+
+  alvo.innerHTML = botoes.join('');
+
+  const blocoMarketplaces = document.getElementById('bloco-marketplaces');
+  if(!p.shopeeUrl && !p.tiktokUrl) blocoMarketplaces.style.display = 'none';
+}
+
 function ndjPersonalizacaoAtiva(){
   const check = document.getElementById('check-personalizar');
   return check && check.checked;
@@ -149,16 +182,19 @@ function ndjPersonalizacaoAtiva(){
    sem quantidade e sem valor, já que o site é só catálogo. */
 function ndjAtualizarBotaoWhatsapp(){
   const p = ndjProdutoAtual;
-  const extra = ndjPersonalizacaoAtiva() ? p.personalizacao.precoExtra : 0;
-  const unitario = p.preco + extra;
-  const total = unitario * ndjQtdSelecionada;
-  document.getElementById('preco-produto-valor').textContent = ndjFormatarMoeda(p.preco);
-  document.getElementById('resumo-preco-final').innerHTML = `
-    <div class="linha"><span>Preço unitário</span><span>${ndjFormatarMoeda(p.preco)}</span></div>
-    ${extra ? `<div class="linha"><span>Personalização</span><span>+ ${ndjFormatarMoeda(extra)}</span></div>` : ''}
-    <div class="linha"><span>Quantidade</span><span>${ndjQtdSelecionada}</span></div>
-    <div class="linha total"><span>Total</span><span>${ndjFormatarMoeda(total)}</span></div>
-  `;
+  if(!p) return;
+  const personalizado = ndjPersonalizacaoAtiva();
+  const textoPersonalizado = personalizado ? (document.getElementById('texto-personalizar') ? document.getElementById('texto-personalizar').value.trim() : '') : '';
+
+  let mensagem = `Olá! Tenho interesse no produto *${p.nome}*`;
+  if(ndjCorSelecionada) mensagem += ` na cor ${ndjCorSelecionada}`;
+  mensagem += '.';
+  if(personalizado && textoPersonalizado) mensagem += `\nPersonalização: ${textoPersonalizado}`;
+  mensagem += `\nLink: ${window.location.href}`;
+
+  const url = `https://wa.me/${NDJ_CONFIG.whatsappNumero}?text=${encodeURIComponent(mensagem)}`;
+  const botao = document.getElementById('btn-comprar-whatsapp');
+  if(botao) botao.href = url;
 }
 
 function ndjLigarAbas(){
