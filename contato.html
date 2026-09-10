@@ -20,19 +20,24 @@
       <div>
         <h3>Envie uma mensagem</h3>
         <form id="form-contato">
-          <div class="grupo-form"><label>Nome</label><input type="text" required></div>
-          <div class="grupo-form"><label>E-mail</label><input type="email" required></div>
+          <div class="grupo-form"><label>Nome</label><input type="text" id="contato-nome" required></div>
+          <div class="grupo-form"><label>E-mail</label><input type="email" id="contato-email" required></div>
           <div class="grupo-form"><label>Assunto</label>
-            <select required>
+            <select id="contato-assunto" required>
               <option value="">Selecione...</option>
               <option>Dúvida sobre produto</option>
-              <option>Status do pedido</option>
+              <option>Reclamação</option>
+              <option>Encomenda</option>
+              <option>Entrega</option>
+              <option>Sugestão</option>
+              <option>Feedback</option>
               <option>Personalização</option>
               <option>Outro</option>
             </select>
           </div>
-          <div class="grupo-form"><label>Mensagem</label><textarea required></textarea></div>
+          <div class="grupo-form"><label>Mensagem</label><textarea id="contato-mensagem" required></textarea></div>
           <button class="btn btn-primario btn-bloco" type="submit">Enviar mensagem</button>
+          <span>Ao enviar, você será direcionado para o WhatsApp</span>
           <p id="mensagem-envio-contato" style="display:none; color:var(--sucesso); margin-top:12px; font-size:14px;">✓ Mensagem enviada com sucesso! Retornaremos em breve.</p>
         </form>
       </div>
@@ -41,7 +46,8 @@
         <h3>Outros canais</h3>
         <div class="card-contato-info"><span class="icone"></span><div><strong>WhatsApp</strong><br>(46) 98837-2988</div></div>
         <div class="card-contato-info"><span class="icone"></span><div><strong>E-mail</strong><br>NDJ3D@OUTLOOK.COM</div></div>
-        <div class="card-contato-info"><span class="icone"></span><div><strong>Instagram</strong><br>NDJ.3D</div></div>
+        <div class="card-contato-info"><span class="icone"></span><div><strong>Instagram</strong><br>@NDJ.3D</div></div>
+      <div class="card-contato-info"><span class="icone"></span><div><strong>TikTok</strong><br>@NDJ3D</div></div>
       </div>
     </div>
   </div>

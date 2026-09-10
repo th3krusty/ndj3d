@@ -4,7 +4,6 @@
 
 document.addEventListener('DOMContentLoaded', async () => {
   await ndjCarregarDadosIniciais();
-  ndjAtualizarBadgeCarrinho();
   ndjRenderizarCategoriasHome();
   ndjRenderizarDestaques();
   ndjRenderizarGradeProdutos();
@@ -16,8 +15,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 function ndjMontarAvisoRetiradaLocal(idAlvo){
   const alvo = document.getElementById(idAlvo);
   if(!alvo) return;
-  alvo.innerHTML = `📍 É de <strong>${NDJ_CONFIG.regiaoLocal}</strong>? A entrega ou retirada também pode ser combinada direto pelo
-    <a href="https://wa.me/${NDJ_CONFIG.whatsappNumero}" target="_blank" rel="noopener">WhatsApp</a>, sem pagar frete calculado.`;
+  alvo.innerHTML = `É de <strong>${NDJ_CONFIG.regiaoLocal}</strong>? A entrega ou retirada também pode ser combinada direto pelo
+    <a href="https://wa.me/${NDJ_CONFIG.whatsappNumero}" target="_blank" rel="noopener">WhatsApp</a>.`;
+}
+
+/* ---------- Aviso de desconto especial comprando direto pelo WhatsApp ---------- */
+function ndjMontarAvisoDescontoWhatsapp(idAlvo){
+  const alvo = document.getElementById(idAlvo);
+  if(!alvo) return;
+  alvo.innerHTML = `💬 <strong>Desconto especial</strong> para quem compra direto pelo WhatsApp!`;
 }
 
 function ndjMostrarAviso(mensagem, tipo){
@@ -68,7 +74,6 @@ function ndjCartaoProdutoHTML(p){
         <div class="cores-mini">
           ${p.cores.slice(0,5).map(c => `<span class="ponto-cor" style="background:${c.hex}" title="${c.nome}"></span>`).join('')}
         </div>
-        <div class="preco">${ndjFormatarMoeda(p.preco)} ${p.personalizacao.disponivel ? '<small>a partir de</small>' : ''}</div>
         <a href="produto.html?id=${p.id}" class="btn btn-contorno btn-pequeno btn-bloco">Ver produto</a>
       </div>
     </div>

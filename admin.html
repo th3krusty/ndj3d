@@ -40,8 +40,6 @@
       <button class="ativo" data-secao="visao-geral">📊 Visão geral</button>
       <button data-secao="produtos">📦 Produtos</button>
       <button data-secao="categorias">🗂️ Categorias</button>
-      <button data-secao="cupons">🏷️ Cupons</button>
-      <button data-secao="pedidos">🚚 Pedidos</button>
       <button data-secao="config">⚙️ Configurações</button>
     </nav>
     <div class="rodape-lateral">
@@ -53,22 +51,23 @@
   <main class="principal-admin">
 
     <div class="grade-metricas">
-      <div class="cartao-metrica"><div class="valor" id="metrica-produtos">0</div><div class="rotulo">Produtos ativos</div></div>
-      <div class="cartao-metrica"><div class="valor" id="metrica-pedidos">0</div><div class="rotulo">Pedidos recebidos</div></div>
-      <div class="cartao-metrica"><div class="valor" id="metrica-faturamento">R$ 0,00</div><div class="rotulo">Faturamento total</div></div>
-      <div class="cartao-metrica"><div class="valor" id="metrica-cupons">0</div><div class="rotulo">Cupons ativos</div></div>
+      <div class="cartao-metrica"><div class="valor" id="metrica-produtos">0</div><div class="rotulo">Produtos no catálogo</div></div>
+      <div class="cartao-metrica"><div class="valor" id="metrica-categorias">0</div><div class="rotulo">Categorias</div></div>
+      <div class="cartao-metrica"><div class="valor" id="metrica-shopee">0</div><div class="rotulo">Com link da Shopee</div></div>
+      <div class="cartao-metrica"><div class="valor" id="metrica-tiktok">0</div><div class="rotulo">Com link do TikTok Shop</div></div>
     </div>
 
     <!-- VISÃO GERAL -->
     <section class="painel-admin-secao ativo" id="secao-visao-geral">
       <div class="cabecalho-admin"><h1>Visão geral</h1></div>
-      <p>Bem-vindo(a) ao painel da NDJ 3D. Use o menu ao lado para cadastrar produtos, criar cupons de desconto e acompanhar os pedidos recebidos na loja.</p>
+      <p>Bem-vindo(a) ao painel da NDJ 3D. Este site funciona como um <strong>catálogo</strong>: a venda acontece na Shopee, no TikTok Shop ou direto pelo WhatsApp. Use o menu ao lado para cadastrar produtos e categorias.</p>
       <div class="camadas densa"></div>
       <h3>Como usar</h3>
       <ul style="padding-left:20px; line-height:1.9; color:var(--tinta-suave)">
-        <li>Em <strong>Produtos</strong>, cadastre até 5 fotos, cores, preço e a opção de personalização com nome.</li>
-        <li>Em <strong>Cupons</strong>, crie descontos percentuais ou de valor fixo para usar no carrinho.</li>
-        <li>Em <strong>Pedidos</strong>, acompanhe e atualize o status de envio de cada compra.</li>
+        <li>Em <strong>Produtos</strong>, cadastre até 5 fotos, cores, preço, a opção de personalização com nome e os links de venda (Shopee e/ou TikTok Shop).</li>
+        <li>Se ainda não tiver o link do TikTok Shop, deixe o campo em branco — o site mostra "em breve" no lugar automaticamente.</li>
+        <li>Em <strong>Categorias</strong>, organize os produtos do jeito que fizer mais sentido para o seu catálogo.</li>
+        <li>Na página do produto, o cliente também encontra um botão para falar direto com você pelo WhatsApp.</li>
       </ul>
     </section>
 
@@ -82,7 +81,7 @@
         <input type="search" class="busca-admin" id="busca-admin-produtos" placeholder="Buscar produto...">
       </div>
       <table class="tabela-admin">
-        <thead><tr><th>Foto</th><th>Nome</th><th>Categoria</th><th>Preço</th><th>Estoque</th><th>Personalização</th><th>Ações</th></tr></thead>
+        <thead><tr><th>Foto</th><th>Nome</th><th>Categoria</th><th>Preço</th><th>Estoque</th><th>Personalização</th><th>Pedido mínimo</th><th>Ações</th></tr></thead>
         <tbody id="corpo-tabela-produtos"></tbody>
       </table>
     </section>
@@ -96,40 +95,6 @@
       <table class="tabela-admin">
         <thead><tr><th>Ícone</th><th>Nome</th><th>Descrição</th><th>Produtos</th><th>Ações</th></tr></thead>
         <tbody id="corpo-tabela-categorias"></tbody>
-      </table>
-    </section>
-
-    <!-- CUPONS -->
-    <section class="painel-admin-secao" id="secao-cupons">
-      <div class="cabecalho-admin"><h1>Cupons de desconto</h1></div>
-      <form id="form-novo-cupom" style="background:var(--creme-2); border:1px solid var(--linha); border-radius:4px; padding:18px; margin-bottom:24px;">
-        <div class="grade-3">
-          <div class="grupo-form"><label>Código</label><input type="text" id="campo-cupom-codigo" placeholder="EX: PROMO10" required></div>
-          <div class="grupo-form"><label>Tipo</label>
-            <select id="campo-cupom-tipo">
-              <option value="percentual">Percentual (%)</option>
-              <option value="fixo">Valor fixo (R$)</option>
-            </select>
-          </div>
-          <div class="grupo-form"><label>Valor</label><input type="number" step="0.01" id="campo-cupom-valor" required></div>
-        </div>
-        <div class="grade-2">
-          <div class="grupo-form"><label>Validade (opcional)</label><input type="date" id="campo-cupom-validade"></div>
-          <div class="grupo-form" style="display:flex; align-items:flex-end;"><button class="btn btn-primario" type="submit">Criar cupom</button></div>
-        </div>
-      </form>
-      <table class="tabela-admin">
-        <thead><tr><th>Código</th><th>Tipo</th><th>Valor</th><th>Status</th><th>Ações</th></tr></thead>
-        <tbody id="corpo-tabela-cupons"></tbody>
-      </table>
-    </section>
-
-    <!-- PEDIDOS -->
-    <section class="painel-admin-secao" id="secao-pedidos">
-      <div class="cabecalho-admin"><h1>Pedidos</h1></div>
-      <table class="tabela-admin">
-        <thead><tr><th>Pedido</th><th>Cliente</th><th>Data</th><th>Total</th><th>Status</th></tr></thead>
-        <tbody id="corpo-tabela-pedidos"></tbody>
       </table>
     </section>
 
@@ -162,10 +127,14 @@
         </div>
         <div class="grupo-form"><label>Preço (R$)</label><input type="number" step="0.01" id="campo-produto-preco" required></div>
       </div>
-      <div class="grade-3">
+      <div class="grade-2">
         <div class="grupo-form"><label>Estoque</label><input type="number" id="campo-produto-estoque"></div>
-        <div class="grupo-form"><label>Peso (kg)</label><input type="number" step="0.01" id="campo-produto-peso"></div>
-        <div class="grupo-form"><label>Link da Shopee</label><input type="url" id="campo-produto-shopee"></div>
+        <div class="grupo-form"><label>Link da Shopee</label><input type="url" id="campo-produto-shopee" placeholder="https://shopee.com.br/..."></div>
+      </div>
+      <div class="grupo-form">
+        <label>Link do TikTok Shop</label>
+        <input type="url" id="campo-produto-tiktok" placeholder="https://shop.tiktok.com/...">
+        <small style="color:var(--tinta-suave)">Ainda não tem o link? Deixe em branco — o site mostra "em breve" no lugar.</small>
       </div>
 
       <label style="font-size:13px; font-weight:600; display:block; margin-bottom:8px;">Fotos do anúncio (recomendado: 5 fotos)</label>
@@ -215,11 +184,14 @@
 
       <label style="font-size:13px; font-weight:600; display:block; margin-bottom:8px;">Cores disponíveis</label>
       <div class="grade-cores-admin" id="lista-cores-admin"></div>
-      <div style="display:flex; gap:8px; margin-bottom:16px;">
-        <input type="text" id="campo-nova-cor-nome" placeholder="Nome da cor" style="flex:1; padding:9px; border:1px solid var(--linha); border-radius:3px;">
+      <div style="display:flex; gap:8px; margin-bottom:6px; flex-wrap:wrap;">
+        <input type="text" id="campo-nova-cor-nome" placeholder="Nome da cor" style="flex:1; min-width:120px; padding:9px; border:1px solid var(--linha); border-radius:3px;">
         <input type="color" id="campo-nova-cor-hex" value="#1B1815" style="width:50px; border:1px solid var(--linha); border-radius:3px;">
+        <label class="btn btn-contorno btn-pequeno" for="campo-nova-cor-foto" style="cursor:pointer; margin:0;" id="rotulo-nova-cor-foto">+ Foto da cor</label>
+        <input type="file" accept="image/*" id="campo-nova-cor-foto" hidden>
         <button type="button" class="btn btn-contorno btn-pequeno" id="btn-add-cor">Adicionar cor</button>
       </div>
+      <p style="font-size:12px; color:var(--tinta-suave); margin:-2px 0 14px;">A foto da cor é opcional, mas ajuda o cliente a ver como a peça fica de verdade naquela cor antes de escolher.</p>
 
       <div class="grupo-form">
         <label><input type="checkbox" id="check-personalizacao-admin"> Permitir personalização com nome</label>
@@ -228,6 +200,14 @@
         <div class="grupo-form"><label>Preço adicional (R$)</label><input type="number" step="0.01" id="campo-personalizacao-preco"></div>
         <div class="grupo-form"><label>Texto de instrução</label><input type="text" id="campo-personalizacao-rotulo"></div>
         <div class="grupo-form"><label>Máx. caracteres</label><input type="number" id="campo-personalizacao-max"></div>
+      </div>
+
+      <div class="grupo-form">
+        <label><input type="checkbox" id="check-pedido-minimo-admin"> Este produto tem pedido mínimo</label>
+      </div>
+      <div class="grupo-form" id="campo-pedido-minimo-admin" style="display:none; max-width:220px;">
+        <label>Quantidade mínima por pedido</label>
+        <input type="number" min="1" step="1" id="campo-pedido-minimo-qtd" value="1">
       </div>
 
       <div class="grupo-form"><label>Descrição</label><textarea id="campo-produto-descricao" required></textarea></div>
