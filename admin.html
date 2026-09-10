@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administrador · NDJ 3D</title>
+<link rel="icon" href="assets/logo.jpg">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="corpo-admin">
+
+<!-- TELA DE LOGIN -->
+<div class="tela-login-admin" id="tela-login">
+  <div class="caixa-login">
+    <img src="assets/logo.jpg" alt="Logo NDJ 3D">
+    <h1>Painel administrador</h1>
+    <p class="sub">NDJ 3D · Ideias que ganham forma</p>
+    <form id="form-login-admin">
+      <div class="grupo-form" style="text-align:left">
+        <label>Senha de acesso</label>
+        <input type="password" id="campo-senha-admin" required autofocus>
+      </div>
+      <button class="btn btn-primario btn-bloco" type="submit">Entrar</button>
+      <p class="erro-login" id="erro-login">Senha incorreta. Tente novamente.</p>
+    </form>
+ 
+    <p style="margin-top:14px"><a href="index.html" style="font-size:13px; text-decoration:underline;">← Voltar para a loja</a></p>
+  </div>
+</div>
+
+<!-- PAINEL -->
+<div class="shell-admin" id="shell-admin" style="display:none">
+  <aside class="lateral-admin">
+    <div class="marca-admin">
+      <img src="assets/logo.jpg" alt="">
+      <div><strong>NDJ 3D</strong><span>Painel admin</span></div>
+    </div>
+    <nav class="nav-admin">
+      <button class="ativo" data-secao="visao-geral">📊 Visão geral</button>
+      <button data-secao="produtos">📦 Produtos</button>
+      <button data-secao="categorias">🗂️ Categorias</button>
+      <button data-secao="config">⚙️ Configurações</button>
+    </nav>
+    <div class="rodape-lateral">
+      <a href="index.html">← Ver loja</a>
+      <button class="btn btn-contorno" id="btn-sair-admin" style="border-color:rgba(255,255,255,0.3); color:#fff;">Sair</button>
+    </div>
+  </aside>
+
+  <main class="principal-admin">
+
+    <div class="grade-metricas">
+      <div class="cartao-metrica"><div class="valor" id="metrica-produtos">0</div><div class="rotulo">Produtos no catálogo</div></div>
+      <div class="cartao-metrica"><div class="valor" id="metrica-categorias">0</div><div class="rotulo">Categorias</div></div>
+      <div class="cartao-metrica"><div class="valor" id="metrica-shopee">0</div><div class="rotulo">Com link da Shopee</div></div>
+      <div class="cartao-metrica"><div class="valor" id="metrica-tiktok">0</div><div class="rotulo">Com link do TikTok Shop</div></div>
+    </div>
+
+    <!-- VISÃO GERAL -->
+    <section class="painel-admin-secao ativo" id="secao-visao-geral">
+      <div class="cabecalho-admin"><h1>Visão geral</h1></div>
+      <p>Bem-vindo(a) ao painel da NDJ 3D. Este site funciona como um <strong>catálogo</strong>: a venda acontece na Shopee, no TikTok Shop ou direto pelo WhatsApp. Use o menu ao lado para cadastrar produtos e categorias.</p>
+      <div class="camadas densa"></div>
+      <h3>Como usar</h3>
+      <ul style="padding-left:20px; line-height:1.9; color:var(--tinta-suave)">
+        <li>Em <strong>Produtos</strong>, cadastre até 5 fotos, cores, preço, a opção de personalização com nome e os links de venda (Shopee e/ou TikTok Shop).</li>
+        <li>Se ainda não tiver o link do TikTok Shop, deixe o campo em branco — o site mostra "em breve" no lugar automaticamente.</li>
+        <li>Em <strong>Categorias</strong>, organize os produtos do jeito que fizer mais sentido para o seu catálogo.</li>
+        <li>Na página do produto, o cliente também encontra um botão para falar direto com você pelo WhatsApp.</li>
+      </ul>
+    </section>
+
+    <!-- PRODUTOS -->
+    <section class="painel-admin-secao" id="secao-produtos">
+      <div class="cabecalho-admin">
+        <h1>Produtos</h1>
+        <button class="btn btn-bronze" id="btn-novo-produto">+ Novo produto</button>
+      </div>
+      <div class="barra-acoes-secao">
+        <input type="search" class="busca-admin" id="busca-admin-produtos" placeholder="Buscar produto...">
+      </div>
+      <table class="tabela-admin">
+        <thead><tr><th>Foto</th><th>Nome</th><th>Categoria</th><th>Preço</th><th>Estoque</th><th>Personalização</th><th>Pedido mínimo</th><th>Ações</th></tr></thead>
+        <tbody id="corpo-tabela-produtos"></tbody>
+      </table>
+    </section>
+
+    <!-- CATEGORIAS -->
+    <section class="painel-admin-secao" id="secao-categorias">
+      <div class="cabecalho-admin">
+        <h1>Categorias</h1>
+        <button class="btn btn-bronze" id="btn-nova-categoria">+ Nova categoria</button>
+      </div>
+      <table class="tabela-admin">
+        <thead><tr><th>Ícone</th><th>Nome</th><th>Descrição</th><th>Produtos</th><th>Ações</th></tr></thead>
+        <tbody id="corpo-tabela-categorias"></tbody>
+      </table>
+    </section>
+
+    <!-- CONFIGURAÇÕES -->
+    <section class="painel-admin-secao" id="secao-config">
+      <div class="cabecalho-admin"><h1>Configurações</h1></div>
+      <form id="form-alterar-senha" style="max-width:360px">
+        <h3>Alterar senha do administrador</h3>
+        <div class="grupo-form"><label>Nova senha</label><input type="password" id="campo-nova-senha" required></div>
+        <button class="btn btn-primario" type="submit">Salvar nova senha</button>
+      </form>
+    </section>
+
+  </main>
+</div>
+
+<!-- MODAL PRODUTO -->
+<div class="sobreposicao-modal" id="modal-produto">
+  <div class="caixa-modal">
+    <div class="cabecalho-modal">
+      <h3 id="titulo-modal-produto" style="margin:0">Novo produto</h3>
+      <button class="fechar-modal" id="fechar-modal-produto">&times;</button>
+    </div>
+    <form id="form-produto-admin">
+      <input type="hidden" id="campo-produto-id">
+      <div class="grupo-form"><label>Nome do produto</label><input type="text" id="campo-produto-nome" required></div>
+      <div class="grade-2">
+        <div class="grupo-form"><label>Categoria</label>
+          <select id="campo-produto-categoria"></select>
+        </div>
+        <div class="grupo-form"><label>Preço (R$)</label><input type="number" step="0.01" id="campo-produto-preco" required></div>
+      </div>
+      <div class="grade-2">
+        <div class="grupo-form"><label>Estoque</label><input type="number" id="campo-produto-estoque"></div>
+        <div class="grupo-form"><label>Link da Shopee</label><input type="url" id="campo-produto-shopee" placeholder="https://shopee.com.br/..."></div>
+      </div>
+      <div class="grupo-form">
+        <label>Link do TikTok Shop</label>
+        <input type="url" id="campo-produto-tiktok" placeholder="https://shop.tiktok.com/...">
+        <small style="color:var(--tinta-suave)">Ainda não tem o link? Deixe em branco — o site mostra "em breve" no lugar.</small>
+      </div>
+
+      <label style="font-size:13px; font-weight:600; display:block; margin-bottom:8px;">Fotos do anúncio (recomendado: 5 fotos)</label>
+      <div class="campos-imagens-admin">
+        <div class="campo-upload-imagem" data-indice="0">
+          <label class="preview-upload-imagem" for="campo-imagem-0">
+            <img id="preview-imagem-0" style="display:none;" alt="">
+            <span class="rotulo-upload-imagem">Foto 1<br><small>(principal)</small></span>
+          </label>
+          <input type="file" accept="image/*" id="campo-imagem-0" class="input-arquivo-imagem" hidden>
+          <button type="button" class="btn-remover-imagem" id="remover-imagem-0" style="display:none;" title="Remover foto">&times;</button>
+        </div>
+        <div class="campo-upload-imagem" data-indice="1">
+          <label class="preview-upload-imagem" for="campo-imagem-1">
+            <img id="preview-imagem-1" style="display:none;" alt="">
+            <span class="rotulo-upload-imagem">Foto 2</span>
+          </label>
+          <input type="file" accept="image/*" id="campo-imagem-1" class="input-arquivo-imagem" hidden>
+          <button type="button" class="btn-remover-imagem" id="remover-imagem-1" style="display:none;" title="Remover foto">&times;</button>
+        </div>
+        <div class="campo-upload-imagem" data-indice="2">
+          <label class="preview-upload-imagem" for="campo-imagem-2">
+            <img id="preview-imagem-2" style="display:none;" alt="">
+            <span class="rotulo-upload-imagem">Foto 3</span>
+          </label>
+          <input type="file" accept="image/*" id="campo-imagem-2" class="input-arquivo-imagem" hidden>
+          <button type="button" class="btn-remover-imagem" id="remover-imagem-2" style="display:none;" title="Remover foto">&times;</button>
+        </div>
+        <div class="campo-upload-imagem" data-indice="3">
+          <label class="preview-upload-imagem" for="campo-imagem-3">
+            <img id="preview-imagem-3" style="display:none;" alt="">
+            <span class="rotulo-upload-imagem">Foto 4</span>
+          </label>
+          <input type="file" accept="image/*" id="campo-imagem-3" class="input-arquivo-imagem" hidden>
+          <button type="button" class="btn-remover-imagem" id="remover-imagem-3" style="display:none;" title="Remover foto">&times;</button>
+        </div>
+        <div class="campo-upload-imagem" data-indice="4">
+          <label class="preview-upload-imagem" for="campo-imagem-4">
+            <img id="preview-imagem-4" style="display:none;" alt="">
+            <span class="rotulo-upload-imagem">Foto 5</span>
+          </label>
+          <input type="file" accept="image/*" id="campo-imagem-4" class="input-arquivo-imagem" hidden>
+          <button type="button" class="btn-remover-imagem" id="remover-imagem-4" style="display:none;" title="Remover foto">&times;</button>
+        </div>
+      </div>
+      <p id="aviso-upload-imagens" style="font-size:12px; color:var(--tinta-suave); margin:-6px 0 14px;">Toque em um quadro para escolher uma foto do seu dispositivo.</p>
+
+      <label style="font-size:13px; font-weight:600; display:block; margin-bottom:8px;">Cores disponíveis</label>
+      <div class="grade-cores-admin" id="lista-cores-admin"></div>
+      <div style="display:flex; gap:8px; margin-bottom:6px; flex-wrap:wrap;">
+        <input type="text" id="campo-nova-cor-nome" placeholder="Nome da cor" style="flex:1; min-width:120px; padding:9px; border:1px solid var(--linha); border-radius:3px;">
+        <input type="color" id="campo-nova-cor-hex" value="#1B1815" style="width:50px; border:1px solid var(--linha); border-radius:3px;">
+        <label class="btn btn-contorno btn-pequeno" for="campo-nova-cor-foto" style="cursor:pointer; margin:0;" id="rotulo-nova-cor-foto">+ Foto da cor</label>
+        <input type="file" accept="image/*" id="campo-nova-cor-foto" hidden>
+        <button type="button" class="btn btn-contorno btn-pequeno" id="btn-add-cor">Adicionar cor</button>
+      </div>
+      <p style="font-size:12px; color:var(--tinta-suave); margin:-2px 0 14px;">A foto da cor é opcional, mas ajuda o cliente a ver como a peça fica de verdade naquela cor antes de escolher.</p>
+
+      <div class="grupo-form">
+        <label><input type="checkbox" id="check-personalizacao-admin"> Permitir personalização com nome</label>
+      </div>
+      <div class="grade-3" id="campos-personalizacao-admin" style="display:none">
+        <div class="grupo-form"><label>Preço adicional (R$)</label><input type="number" step="0.01" id="campo-personalizacao-preco"></div>
+        <div class="grupo-form"><label>Texto de instrução</label><input type="text" id="campo-personalizacao-rotulo"></div>
+        <div class="grupo-form"><label>Máx. caracteres</label><input type="number" id="campo-personalizacao-max"></div>
+      </div>
+
+      <div class="grupo-form">
+        <label><input type="checkbox" id="check-pedido-minimo-admin"> Este produto tem pedido mínimo</label>
+      </div>
+      <div class="grupo-form" id="campo-pedido-minimo-admin" style="display:none; max-width:220px;">
+        <label>Quantidade mínima por pedido</label>
+        <input type="number" min="1" step="1" id="campo-pedido-minimo-qtd" value="1">
+      </div>
+
+      <div class="grupo-form"><label>Descrição</label><textarea id="campo-produto-descricao" required></textarea></div>
+      <div class="grupo-form"><label>Características (uma por linha)</label><textarea id="campo-produto-caracteristicas" placeholder="Material: PLA premium&#10;Tamanho: 6x4cm"></textarea></div>
+
+      <div class="rodape-modal">
+        <button type="button" class="btn btn-contorno" id="cancelar-modal-produto" onclick="document.getElementById('modal-produto').classList.remove('aberta')">Cancelar</button>
+        <button type="submit" class="btn btn-primario">Salvar produto</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL CATEGORIA -->
+<div class="sobreposicao-modal" id="modal-categoria">
+  <div class="caixa-modal" style="max-width:460px">
+    <div class="cabecalho-modal">
+      <h3 id="titulo-modal-categoria" style="margin:0">Nova categoria</h3>
+      <button class="fechar-modal" id="fechar-modal-categoria">&times;</button>
+    </div>
+    <form id="form-categoria-admin">
+      <input type="hidden" id="campo-categoria-id">
+      <div class="grupo-form"><label>Nome da categoria</label><input type="text" id="campo-categoria-nome" required placeholder="Ex: Chaveiros"></div>
+      <div class="grupo-form"><label>Descrição curta</label><input type="text" id="campo-categoria-desc" placeholder="Ex: Chaveiros personalizados no seu estilo"></div>
+      <div class="grupo-form">
+        <label>Ícone (opcional)</label>
+        <input type="text" id="campo-categoria-icone" placeholder="assets/icones/exemplo.svg ou URL de uma imagem">
+        <small style="color:var(--tinta-suave)">Deixe em branco para usar um ícone padrão. Você pode subir um arquivo .svg/.png na pasta assets/icones do projeto e colocar o caminho aqui.</small>
+      </div>
+      <div class="rodape-modal">
+        <button type="button" class="btn btn-contorno" onclick="document.getElementById('modal-categoria').classList.remove('aberta')">Cancelar</button>
+        <button type="submit" class="btn btn-primario">Salvar categoria</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

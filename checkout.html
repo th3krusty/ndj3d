@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout · NDJ 3D</title>
+<link rel="icon" href="assets/logo.jpg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-pagina="checkout" data-nav="0" data-flutuantes="0" data-rodape="minimo">
+<div class="topo-aviso" id="ndj-topo-aviso"></div>
+<header class="cabecalho" id="ndj-cabecalho"></header>
+
+<section class="secao">
+  <div class="container">
+    <div class="passos-checkout">
+      <div class="passo">1. Carrinho</div>
+      <div class="passo ativo">2. Checkout</div>
+      <div class="passo">3. Confirmação</div>
+    </div>
+
+    <form id="form-checkout" class="grade-carrinho">
+      <div>
+        <h3>Dados para entrega</h3>
+        <div class="grade-2">
+          <div class="grupo-form"><label>Nome completo</label><input type="text" id="campo-nome-cliente" required></div>
+          <div class="grupo-form"><label>E-mail</label><input type="email" id="campo-email-cliente" required></div>
+        </div>
+        <div class="grade-2">
+          <div class="grupo-form"><label>Telefone / WhatsApp</label><input type="tel" id="campo-telefone-cliente" required></div>
+          <div class="grupo-form"><label>CEP</label>
+            <div style="display:flex; gap:8px">
+              <input type="text" id="campo-cep-checkout" placeholder="00000-000" required style="flex:1">
+              <button type="button" class="btn btn-contorno btn-pequeno" id="btn-calcular-frete-checkout">Calcular frete</button>
+            </div>
+          </div>
+        </div>
+        <div class="grupo-form"><label>Endereço (rua, número, complemento)</label><input type="text" id="campo-endereco-cliente" required></div>
+        <div class="grade-2">
+          <div class="grupo-form"><label>Cidade</label><input type="text" id="campo-cidade-cliente" required></div>
+          <div class="grupo-form"><label>Estado</label><input type="text" id="campo-estado-cliente" maxlength="2" placeholder="PR" required></div>
+        </div>
+
+        <div class="aviso-retirada-local caixa-combinar-local">
+          <label class="linha-check">
+            <input type="checkbox" id="check-combinar-local">
+            <span>Sou de <strong id="texto-regiao-local">Chopinzinho e Região</strong> — quero combinar a entrega ou retirada direto pelo WhatsApp (sem pagar frete calculado)</span>
+          </label>
+        </div>
+
+        <div id="opcoes-frete-checkout" style="margin-bottom:24px"></div>
+
+        <h3>Forma de pagamento</h3>
+        <div class="caixa-mercadopago">
+          <img src="assets/icones/mercadopago.svg" alt="Mercado Pago" class="logo-mercadopago">
+          <div>
+            <strong>Pagamento seguro via Mercado Pago</strong>
+            <p>Você poderá pagar com Pix, cartão de crédito/débito ou boleto na página do Mercado Pago. Depois de confirmado, você volta automaticamente para o NDJ 3D.</p>
+          </div>
+        </div>
+
+        <p style="font-size:12px; color:var(--tinta-suave); margin-top:6px">
+          Ao continuar, você será redirecionado ao ambiente seguro do Mercado Pago para concluir o pagamento.
+        </p>
+      </div>
+
+      <div>
+        <div class="caixa-resumo">
+          <h3 style="margin-bottom:16px">Resumo do pedido</h3>
+          <div id="resumo-itens-checkout" style="margin-bottom:14px"></div>
+          <div class="linha"><span>Subtotal</span><span id="checkout-subtotal">R$ 0,00</span></div>
+          <div class="linha" id="linha-checkout-desconto" style="display:none"><span>Desconto</span><span id="checkout-desconto">R$ 0,00</span></div>
+          <div class="linha"><span>Frete</span><span id="checkout-frete">Calcule ao lado</span></div>
+          <div class="linha total"><span>Total</span><span id="checkout-total">R$ 0,00</span></div>
+          <button type="submit" class="btn btn-primario btn-bloco" style="margin-top:16px" id="btn-confirmar-pedido">Ir para pagamento</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<footer class="rodape" id="ndj-rodape"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/data.js"></script>
+<script src="js/config.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/main.js"></script>
+<script src="js/checkout.js"></script>
+</body>
+</html>
