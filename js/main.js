@@ -17,6 +17,7 @@ function ndjMontarAvisoRetiradaLocal(idAlvo){
   if(!alvo) return;
   alvo.innerHTML = `É de <strong>${NDJ_CONFIG.regiaoLocal}</strong>? A entrega ou retirada também pode ser combinada direto pelo
     <a href="https://wa.me/${NDJ_CONFIG.whatsappNumero}" target="_blank" rel="noopener">WhatsApp</a>.`;
+<<<<<<< HEAD
 }
 
 /* ---------- Aviso de desconto especial comprando direto pelo WhatsApp ---------- */
@@ -24,6 +25,8 @@ function ndjMontarAvisoDescontoWhatsapp(idAlvo){
   const alvo = document.getElementById(idAlvo);
   if(!alvo) return;
   alvo.innerHTML = `💬 <strong>Desconto especial</strong> para quem compra direto pelo WhatsApp!`;
+=======
+>>>>>>> dbec8ce784053ebb4703da2c20bae19026a49d60
 }
 
 function ndjMostrarAviso(mensagem, tipo){
