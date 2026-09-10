@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Produto · NDJ 3D</title>
+<link rel="icon" href="assets/logo.jpg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-pagina="produtos">
+<div class="topo-aviso" id="ndj-topo-aviso"></div>
+<header class="cabecalho" id="ndj-cabecalho"></header>
+
+<section class="secao" style="padding-top:30px" id="conteudo-produto">
+  <div class="container">
+    <p class="trilha"><a href="index.html">Início</a> / <a href="produtos.html" id="trilha-categoria">Categoria</a> / <span id="trilha-produto">Produto</span></p>
+
+    <div class="produto-detalhe">
+      <div>
+        <div class="galeria-principal"><img id="galeria-principal-img" src="" alt=""></div>
+        <div class="galeria-miniaturas" id="galeria-miniaturas"></div>
+      </div>
+
+      <div class="info-produto">
+        <span class="eyebrow">NDJ 3D</span>
+        <h1 id="nome-produto">Carregando...</h1>
+
+        <div class="bloco-opcao" id="bloco-cores"></div>
+        <div class="bloco-opcao" id="bloco-personalizar"></div>
+
+        <small id="aviso-pedido-minimo" style="display:none; color:var(--tinta-suave); margin-top:-8px;"></small>
+
+        <div class="aviso-desconto-whatsapp" id="aviso-desconto-whatsapp"></div>
+
+        <div class="bloco-marketplaces" id="bloco-marketplaces">
+          <label class="titulo-opcao">Comprar no marketplace</label>
+          <div class="links-marketplace" id="links-marketplace"></div>
+        </div>
+<p>   </p>
+        <div class="acoes-produto">
+          <a class="btn btn-bronze" id="btn-comprar-whatsapp" href="#" target="_blank" rel="noopener" style="flex:1">Comprar pelo WhatsApp</a>
+        </div>
+
+        <div class="aviso-retirada-local" id="aviso-retirada-local" style="margin-top:18px"></div>
+      </div>
+    </div>
+
+    <div class="abas-produto">
+      <div class="abas-cabecalho">
+        <button class="ativa" data-painel="painel-descricao">Descrição</button>
+        <button data-painel="painel-caracteristicas">Características</button>
+        <button data-painel="painel-entrega">Entrega</button>
+      </div>
+      <div class="painel-aba ativa" id="painel-descricao"></div>
+      <div class="painel-aba" id="painel-caracteristicas"></div>
+      <div class="painel-aba" id="painel-entrega"></div>
+    </div>
+
+    <div class="secao" id="secao-relacionados">
+      <div class="secao-topo"><h2>Você também pode gostar</h2></div>
+      <div class="grade-produtos" id="grade-relacionados"></div>
+    </div>
+  </div>
+</section>
+
+<footer class="rodape" id="ndj-rodape"></footer>
+
+<div id="ndj-flutuantes"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/data.js"></script>
+<script src="js/config.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/main.js"></script>
+<script src="js/produto.js"></script>
+</body>
+</html>
