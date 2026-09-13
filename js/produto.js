@@ -111,7 +111,15 @@ async function ndjMontarPaginaProduto(){
   ndjMontarLinksMarketplace(p);
 
   // Descrição / características
-  document.getElementById('painel-descricao').innerHTML = `<p>${p.descricao}</p>`;
+  // Preserva as quebras de linha digitadas no admin: o texto é escapado
+  // (evita HTML quebrado com < > &) e cada \n vira um <br>, já que
+  // innerHTML ignora quebras de linha "cruas" dentro de texto normal.
+  const descricaoEscapada = (p.descricao || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\r\n|\r|\n/g, '<br>');
+  document.getElementById('painel-descricao').innerHTML = `<p>${descricaoEscapada}</p>`;
   document.getElementById('painel-caracteristicas').innerHTML = `<ul>${p.caracteristicas.map(c => `<li>${c}</li>`).join('')}</ul>`;
   document.getElementById('painel-entrega').innerHTML = `
     <p>Este produto pode ser comprado na <strong>Shopee</strong>${p.tiktokUrl ? ' e no <strong>TikTok Shop</strong>' : ''} — o frete e o prazo de entrega são calculados direto no marketplace, com todas as garantias da plataforma.</p>

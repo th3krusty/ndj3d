@@ -126,7 +126,7 @@ insert into public.categorias (id, nome, "desc", icone, ordem) values
   ('presentes', 'Presentes', 'Peças criativas para presentear', 'assets/icones/presentes.svg', 1),
   ('lembrancinhas', 'Lembrancinhas', 'Festas, chás e eventos especiais', 'assets/icones/lembrancinhas.svg', 2),
   ('chaveiros', 'Chaveiros', 'Chaveiros personalizados no seu estilo', 'assets/icones/chaveiros.svg', 3),
-  ('sensoriais', 'Sensoriais', 'Brinquedos e objetos sensoriais (fidgets)', 'assets/icones/sensoriais.png', 4),
+  ('sensoriais', 'Sensoriais', 'Brinquedos e objetos sensoriais (fidgets)', 'assets/icones/sensoriais.svg', 4),
   ('utilidades', 'Utilidades', 'Peças práticas para o dia a dia', 'assets/icones/utilidades.svg', 5),
   ('decoracao', 'Decoração', 'Peças para deixar seu ambiente único', 'assets/icones/decoracao.svg', 6)
 on conflict (id) do nothing;
