@@ -10,7 +10,7 @@ const NDJ_CONFIG = {
   slogan: 'Ideias que ganham forma',
 
   // Faixa de aviso no topo do site
-  topoAviso: 'Catálogo NDJ 3D — compre pela Shopee, TikTok Shop ou direto pelo WhatsApp!',
+  topoAviso: 'Catálogo NDJ 3D — compre pela Shopee ou direto pelo WhatsApp!',
 
   // Marketplaces (loja oficial). Deixe tiktokShopUrl em branco enquanto a
   // loja no TikTok Shop ainda não estiver no ar — o site mostra "em breve".

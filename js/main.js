@@ -23,7 +23,7 @@ function ndjMontarAvisoRetiradaLocal(idAlvo){
 function ndjMontarAvisoDescontoWhatsapp(idAlvo){
   const alvo = document.getElementById(idAlvo);
   if(!alvo) return;
-  alvo.innerHTML = `💬 <strong>Desconto especial</strong> para quem compra direto pelo WhatsApp!`;
+  alvo.innerHTML = `<strong>Desconto especial</strong> para quem comprar direto pelo WhatsApp!`;
 }
 
 function ndjMostrarAviso(mensagem, tipo){
