@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FQVPS19YLC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-FQVPS19YLC');
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Produto · NDJ 3D</title>
+<link rel="icon" href="assets/logo.jpg">
+<link rel="stylesheet" href="css/style.css?v=4">
+</head>
+<body data-pagina="produtos">
+<div class="topo-aviso" id="ndj-topo-aviso"></div>
+<header class="cabecalho" id="ndj-cabecalho"></header>
+
+<section class="secao" style="padding-top:30px" id="conteudo-produto">
+  <div class="container">
+    <p class="trilha"><a href="index.html">Início</a> / <a href="produtos.html" id="trilha-categoria">Categoria</a> / <span id="trilha-produto">Produto</span></p>
+
+    <div class="produto-detalhe">
+      <div>
+        <div class="galeria-principal"><img id="galeria-principal-img" src="" alt=""></div>
+        <div class="galeria-miniaturas" id="galeria-miniaturas"></div>
+      </div>
+
+      <div class="info-produto">
+        <span class="eyebrow">NDJ 3D</span>
+        <h1 id="nome-produto">Carregando...</h1>
+
+        <div class="avaliacao" id="resumo-avaliacao-produto"></div>
+
+        <div id="selo-promocao-produto"></div>
+        <div class="preco-produto" id="preco-produto-valor">R$ 0,00</div>
+        <small class="aviso-preco-site">Preço exclusivo para compras no site</small>
+        <div class="parcelas" id="estoque-produto" style="color:var(--sucesso)"></div>
+
+        <div class="bloco-opcao" id="bloco-cores"></div>
+        <div class="bloco-opcao" id="bloco-personalizar"></div>
+
+        <div class="bloco-opcao">
+          <label class="titulo-opcao">Quantidade</label>
+          <div class="quantidade-linha">
+            <div class="seletor-qtd">
+              <button type="button" id="btn-qtd-menos">−</button>
+              <input type="number" id="qtd-input" value="1" min="1">
+              <button type="button" id="btn-qtd-mais">+</button>
+            </div>
+          </div>
+          <small id="aviso-pedido-minimo" style="display:none; color:var(--tinta-suave);"></small>
+        </div>
+
+        <div class="resumo-preco-final" id="resumo-preco-final"></div>
+
+       
+        <div class="acoes-produto">
+          <button type="button" class="btn btn-contorno" id="btn-adicionar-carrinho" style="flex:1">Adicionar ao carrinho</button>
+          <button type="button" class="btn btn-primario" id="btn-comprar-agora" style="flex:1">Comprar agora</button>
+        </div>
+
+        <div class="bloco-marketplaces" id="bloco-marketplaces" style="margin-top:20px">
+          <label class="titulo-opcao">Ou compre no marketplace</label>
+          <div class="links-marketplace" id="links-marketplace"></div>
+        </div>
+
+        <div class="acoes-produto" style="margin-top:12px">
+          <a class="btn btn-bronze" id="btn-comprar-whatsapp" href="#" target="_blank" rel="noopener" style="flex:1">Comprar pelo WhatsApp</a>
+        </div>
+
+        <div class="aviso-retirada-local" id="aviso-retirada-local" style="margin-top:18px"></div>
+      </div>
+    </div>
+
+    <div class="abas-produto">
+      <div class="abas-cabecalho">
+        <button class="ativa" data-painel="painel-descricao">Descrição</button>
+        <button data-painel="painel-caracteristicas">Características</button>
+        <button data-painel="painel-entrega">Entrega</button>
+        <button data-painel="painel-avaliacoes">Avaliações</button>
+      </div>
+      <div class="painel-aba ativa" id="painel-descricao"></div>
+      <div class="painel-aba" id="painel-caracteristicas"></div>
+      <div class="painel-aba" id="painel-entrega">
+        <div class="calculo-frete">
+          <label class="titulo-opcao" style="display:block; margin-bottom:4px; font-weight:600;">Calcular frete</label>
+          <div class="linha-cep">
+            <input type="text" id="campo-cep-produto" placeholder="Digite seu CEP">
+            <button type="button" class="btn btn-contorno btn-pequeno" id="btn-calcular-frete-produto">Calcular</button>
+          </div>
+          <div class="resultado-frete" id="resultado-frete-produto"></div>
+        </div>
+        <div id="texto-entrega-produto"></div>
+      </div>
+      <div class="painel-aba" id="painel-avaliacoes"></div>
+    </div>
+
+    <div class="secao" id="secao-relacionados">
+      <div class="secao-topo"><h2>Você também pode gostar</h2></div>
+      <div class="grade-produtos" id="grade-relacionados"></div>
+    </div>
+  </div>
+</section>
+
+<footer class="rodape" id="ndj-rodape"></footer>
+
+<div id="ndj-flutuantes"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabaseClient.js?v=4"></script>
+<script src="js/data.js?v=4"></script>
+<script src="js/config.js?v=4"></script>
+<script src="js/layout.js?v=4"></script>
+<script src="js/main.js?v=4"></script>
+<script src="js/produto.js?v=4"></script>
+</body>
+</html>

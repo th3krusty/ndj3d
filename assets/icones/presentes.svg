@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+<defs>
+  <linearGradient id="caixaCorpo" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#C79A5E"/>
+    <stop offset="55%" stop-color="#B08D57"/>
+    <stop offset="100%" stop-color="#8A6B3D"/>
+  </linearGradient>
+  <linearGradient id="caixaTampa" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#241F1A"/>
+    <stop offset="100%" stop-color="#1B1815"/>
+  </linearGradient>
+  <linearGradient id="fita" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#F4EEE2"/>
+    <stop offset="100%" stop-color="#D8BD8E"/>
+  </linearGradient>
+  <filter id="sombraCaixa" x="-30%" y="-30%" width="160%" height="160%">
+    <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#1B1815" flood-opacity="0.28"/>
+  </filter>
+</defs>
+
+<ellipse cx="60" cy="103" rx="34" ry="7" fill="#1B1815" opacity="0.12"/>
+
+<g filter="url(#sombraCaixa)">
+  <rect x="26" y="52" width="68" height="46" rx="4" fill="url(#caixaCorpo)"/>
+  <g stroke="#00000022" stroke-width="1">
+    <line x1="26" y1="60" x2="94" y2="60"/>
+    <line x1="26" y1="68" x2="94" y2="68"/>
+    <line x1="26" y1="76" x2="94" y2="76"/>
+    <line x1="26" y1="84" x2="94" y2="84"/>
+    <line x1="26" y1="92" x2="94" y2="92"/>
+  </g>
+  <rect x="26" y="52" width="68" height="46" rx="4" fill="none" stroke="#6B4F28" stroke-width="1.5"/>
+
+  <rect x="22" y="38" width="76" height="18" rx="3" fill="url(#caixaTampa)"/>
+  <rect x="22" y="38" width="76" height="18" rx="3" fill="none" stroke="#000" stroke-opacity="0.25" stroke-width="1"/>
+
+  <rect x="55" y="38" width="10" height="60" fill="url(#fita)"/>
+  <rect x="26" y="47" width="68" height="9" fill="url(#fita)"/>
+
+  <path d="M60 40 C 46 40, 40 26, 50 20 C 58 15, 62 24, 60 40 Z" fill="#D8BD8E"/>
+  <path d="M60 40 C 74 40, 80 26, 70 20 C 62 15, 58 24, 60 40 Z" fill="#F4EEE2"/>
+  <circle cx="60" cy="38" r="5" fill="#8A6B3D"/>
+</g>
+</svg>
