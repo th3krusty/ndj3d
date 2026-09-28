@@ -158,6 +158,34 @@ h1,h2,h3,h4{
   color: var(--bronze-escuro);
 }
 
+.busca-cabecalho{
+  display:flex;
+  align-items:center;
+  flex:0 1 260px;
+  min-width:0;
+  border:1px solid var(--linha);
+  border-radius:20px;
+  background:#fff;
+  overflow:hidden;
+}
+.busca-cabecalho input{
+  flex:1;
+  min-width:0;
+  border:none;
+  outline:none;
+  background:transparent;
+  padding:9px 4px 9px 14px;
+  font-size:14px;
+}
+.busca-cabecalho button{
+  border:none;
+  background:none;
+  padding:0 12px;
+  font-size:15px;
+  cursor:pointer;
+}
+.busca-cabecalho:focus-within{ border-color: var(--bronze); }
+
 .acoes-cabecalho{
   display:flex;
   align-items:center;
@@ -651,6 +679,8 @@ h1,h2,h3,h4{
   .opcoes-pagamento{ grid-template-columns:1fr; }
 }
 @media (max-width: 860px){
+  .cabecalho .container{ flex-wrap:wrap; }
+  .busca-cabecalho{ order:5; flex:1 1 100%; }
   .btn-menu-mobile{ display:block; }
   .nav-principal{
     position:absolute;

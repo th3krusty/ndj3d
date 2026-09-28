@@ -251,6 +251,3 @@ insert into public.categorias (id, nome, "desc", icone, ordem) values
   ('decoracao', 'Decoração', 'Peças para deixar seu ambiente único', 'assets/icones/decoracao.svg', 6)
 on conflict (id) do nothing;
 
-insert into public.produtos (id, nome, categoria, preco, imagens, cores, personalizacao, descricao, caracteristicas, estoque, shopee_url, tiktok_url) values
-
-on conflict (id) do nothing;

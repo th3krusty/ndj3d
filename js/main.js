@@ -124,13 +124,28 @@ function ndjRenderizarGradeProdutos(){
   if(!alvo) return;
 
   const categoriaUrl = ndjParametroUrl('categoria') || 'todas';
+  const buscaUrl = ndjParametroUrl('busca') || '';
   ndjMontarFiltros(categoriaUrl);
-  ndjAplicarFiltro(categoriaUrl);
 
   const busca = document.getElementById('campo-busca-produtos');
+  if(busca) busca.value = buscaUrl;
+  const buscaTopo = document.getElementById('campo-busca-cabecalho');
+  if(buscaTopo) buscaTopo.value = buscaUrl;
+  ndjAplicarFiltro(categoriaUrl, buscaUrl);
+
   if(busca){
-    busca.addEventListener('input', () => ndjAplicarFiltro(ndjFiltroAtivo(), busca.value));
+    busca.addEventListener('input', () => ndjFiltrarPorBusca(busca.value, busca));
   }
+}
+
+/* Aplica um termo de busca mantendo a categoria escolhida e os dois campos
+   (cabeçalho e da página) iguais. "origem" é o campo que está sendo digitado. */
+function ndjFiltrarPorBusca(termo, origem){
+  ['campo-busca-produtos', 'campo-busca-cabecalho'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el && el !== origem && el.value !== termo) el.value = termo;
+  });
+  ndjAplicarFiltro(ndjFiltroAtivo(), termo);
 }
 
 function ndjMontarFiltros(categoriaAtiva){
@@ -163,7 +178,11 @@ function ndjAplicarFiltro(categoria, termoBusca){
   }
   if(termoBusca){
     const t = termoBusca.toLowerCase();
-    produtos = produtos.filter(p => p.nome.toLowerCase().includes(t));
+    produtos = produtos.filter(p => {
+      const cat = ndjListarCategorias().find(c => c.id === p.categoria);
+      const texto = [p.nome, p.descricao, cat ? cat.nome : ''].join(' ').toLowerCase();
+      return texto.includes(t);
+    });
   }
   document.getElementById('contador-resultados').textContent =
     produtos.length + (produtos.length === 1 ? ' produto encontrado' : ' produtos encontrados');

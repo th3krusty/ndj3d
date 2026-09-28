@@ -64,6 +64,10 @@ function ndjInjetarCabecalho(paginaAtiva, comNav){
         </div>
       </a>
       ${nav}
+      <form class="busca-cabecalho" id="ndj-busca-cabecalho" role="search" action="produtos.html" method="get">
+        <input type="search" name="busca" id="campo-busca-cabecalho" placeholder="Buscar produtos..." aria-label="Buscar produtos" autocomplete="off">
+        <button type="submit" aria-label="Buscar">🔍</button>
+      </form>
       <div class="acoes-cabecalho">
         <a href="carrinho.html" class="icone-btn" title="Carrinho">
           🛒<span class="badge-carrinho">0</span>
@@ -73,6 +77,35 @@ function ndjInjetarCabecalho(paginaAtiva, comNav){
     </div>`;
 
   if(comNav) ndjLigarMenuMobile();
+  ndjLigarBuscaCabecalho();
+}
+
+/* Busca do cabeçalho: em qualquer página envia para produtos.html?busca=...;
+   na própria página de produtos, filtra a grade enquanto a pessoa digita. */
+function ndjLigarBuscaCabecalho(){
+  const form = document.getElementById('ndj-busca-cabecalho');
+  const campo = document.getElementById('campo-busca-cabecalho');
+  if(!form || !campo) return;
+
+  const inicial = new URLSearchParams(window.location.search).get('busca');
+  if(inicial) campo.value = inicial;
+
+  const naListagem = !!document.getElementById('grade-produtos-todos');
+  form.addEventListener('submit', (e) => {
+    const termo = campo.value.trim();
+    if(naListagem){
+      e.preventDefault();
+      if(typeof ndjFiltrarPorBusca === 'function') ndjFiltrarPorBusca(termo);
+    } else if(!termo){
+      e.preventDefault();
+      window.location.href = 'produtos.html';
+    }
+  });
+  if(naListagem){
+    campo.addEventListener('input', () => {
+      if(typeof ndjFiltrarPorBusca === 'function') ndjFiltrarPorBusca(campo.value.trim());
+    });
+  }
 }
 
 function ndjLigarMenuMobile(){

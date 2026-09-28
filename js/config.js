@@ -10,7 +10,7 @@ const NDJ_CONFIG = {
   slogan: 'Ideias que ganham forma',
 
   // Faixa de aviso no topo do site
-  topoAviso: 'Compre pelo site com Pix, cartão ou boleto — ou pela Shopee, TikTok Shop e WhatsApp!',
+  topoAviso: 'Compre pelo site com Pix, cartão ou boleto — ou pela Shopee e WhatsApp!',
 
   // Marketplaces (loja oficial). Deixe tiktokShopUrl em branco enquanto a
   // loja no TikTok Shop ainda não estiver no ar — o site mostra "em breve".
@@ -21,7 +21,7 @@ const NDJ_CONFIG = {
   whatsappExibicao: '(46) 98837-2988',    // como aparece escrito no rodapé
   instagramUsuario: 'ndj.3d',
   instagramUrl: 'https://www.instagram.com/ndj.3d/',
-  email: 'ndj3d@outlook.com',
+  email: 'contato@ndj3d.com.br',
   localizacao: '',
   regiaoLocal: 'Chopinzinho e Região',
 
