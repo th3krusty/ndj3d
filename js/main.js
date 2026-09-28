@@ -37,7 +37,7 @@ async function ndjRenderizarBannerIndex(){
   `;
 
   alvo.innerHTML = banner.link
-    ? `<a class="banner-index-link" href="${banner.link}" target="_blank" rel="noopener">${miolo}</a>`
+    ? `<a class="banner-index-link" href="${banner.link}" rel="noopener">${miolo}</a>`
     : `<div class="banner-index-wrap">${miolo}</div>`;
 }
 
