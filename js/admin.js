@@ -623,23 +623,16 @@ async function ndjCriarCupomAdmin(e){
   }
 }
 
-/* Traduz o erro do Supabase numa mensagem que diz o que consertar. */
+/* Mostra o motivo real do erro do Supabase (código + mensagem original). */
 function ndjMotivoErroCupom(err){
-  const codigo = err && err.code;
+  const codigo = (err && err.code) || '';
   const msg = (err && err.message) || '';
-  if(codigo === 'PGRST204' || codigo === '42703' || /column/i.test(msg)){
-    return 'Não foi possível criar o cupom: faltam colunas na tabela "cupons" do Supabase. Rode supabase/corrigir_cupons.sql no SQL Editor.';
-  }
-  if(codigo === 'PGRST205' || codigo === '42P01'){
-    return 'Não foi possível criar o cupom: a tabela "cupons" não existe no Supabase. Rode supabase/corrigir_cupons.sql no SQL Editor.';
-  }
+  const detalhe = (err && err.details) ? ' | ' + err.details : '';
+  if(codigo === '23505') return 'Já existe um cupom com esse código.';
   if(codigo === '42501' || /row-level security|permission denied|JWT/i.test(msg)){
-    return 'Não foi possível criar o cupom: sem permissão. Saia e entre de novo no admin (a sessão pode ter expirado).';
+    return 'Sem permissão para criar cupom (' + msg + '). Saia e entre de novo no admin.';
   }
-  if(codigo === '23505'){
-    return 'Já existe um cupom com esse código.';
-  }
-  return 'Não foi possível criar o cupom' + (msg ? ': ' + msg : '.');
+  return 'Não foi possível criar o cupom [' + (codigo || 'sem código') + ']: ' + (msg || 'erro desconhecido') + detalhe;
 }
 
 /* ---------------- Pedidos ---------------- */
